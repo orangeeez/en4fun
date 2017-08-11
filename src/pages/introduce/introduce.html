@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>English 4 Fun</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <button class="skip" ion-button small round clear
+    (click)="onSkipClick()">SKIP</button>
+  <ion-slides pager>
+
+    <ion-slide>
+      <h2>Welcome</h2>
+    </ion-slide>
+
+    <ion-slide>
+      <h2>Learning English</h2>
+      <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+      <button class="get-started" ion-button outline small round icon-left
+        (click)="onGetStartedClick()">
+        <ion-icon name="logo-facebook"></ion-icon>
+        GET STARTED
+      </button>  
+    </ion-slide>
+
+  </ion-slides>
+</ion-content>
