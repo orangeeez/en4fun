@@ -7,9 +7,11 @@
         </ion-avatar>
         <h2>{{user.displayName}}</h2>
         <p>{{user.email}}</p>
+        <ion-badge *ngIf="user" item-end>{{badge}}</ion-badge>
       </ion-item>
-      <button ion-item menuClose *ngFor="let p of pages">
-        {{p.title}}
+      <button ion-item menuClose *ngFor="let page of pages"
+        (click)="openPage(page.component)">
+        {{ page.title }}
       </button>
       <button ion-item menuClose (click)="signOut()">Sign Out</button>
     </ion-list>

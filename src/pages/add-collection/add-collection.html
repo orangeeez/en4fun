@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ action == 'add' ? 'Add Collection' : 'Edit Collection' }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only
+        [disabled]="!name ||
+                    !type ||
+                    !collection.imageURL"
+        (click)="onCheckmarkCollectionClick()">
+        <ion-icon name="md-checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item class="center">
+      <ion-row>
+        <ion-col col-12>
+          <img [src]="collection.imageURL ? collection.imageURL : imageURL"
+            (click)="onAddImageClick()">
+        </ion-col>
+      </ion-row>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Name</ion-label>
+      <ion-input [(ngModel)]="name" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Type</ion-label>
+      <ion-input type="text" [disabled]="true" [value]="type"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="!studentKey">
+      <ion-label>Students</ion-label>
+      <ion-select [(ngModel)]="selectedStudents" multiple="true">
+        <ng-container *ngIf="isStudentsSelected">
+         <ion-option *ngFor="let studentKey of studentKeys | async; let i = index" 
+          [selected]="selectedStudentKeys.indexOf(studentKey.$key) !== -1"
+          [value]="studentKey">
+          {{ studentKey.$value }}
+        </ion-option>   
+        </ng-container>  
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="studentKey">
+      <ion-label floating>Student</ion-label>
+      <ion-input [value]="studentKey.$value" type="text" [disabled]="true"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="type == 'vocabulary'">
+      <ion-label>Words</ion-label>
+      <ion-select [(ngModel)]="selectedWords" multiple="true">
+        <ng-container *ngFor="let wordKey of wordKeys | async">
+          <ion-option *ngIf="!wordKey.used"
+            [value]="wordKey">
+            {{ wordKey.$key | capitalize }}
+          </ion-option>
+        </ng-container>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>

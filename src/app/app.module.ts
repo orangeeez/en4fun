@@ -4,11 +4,22 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { Facebook } from '@ionic-native/facebook';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { ImagePicker } from '@ionic-native/image-picker';
+import { File } from "@ionic-native/file";
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { IntroducePage } from "../pages/introduce/introduce";
 import { LoginPage } from "../pages/login/login";
+import { CollectionsPage } from "../pages/collections/collections";
+import { CollectionPage } from "../pages/collection/collection";
+import { AddCollectionPage } from "../pages/add-collection/add-collection";
+import { WordsPage } from "../pages/words/words";
+import { AddWordPage } from "../pages/add-word/add-word";
+import { CapitalizePipe } from "../pipes/capitalize/capitalize";
+import { ReversePipe } from "../pipes/reverse/reverse";
+import { WordsByCollectionPipe } from "../pipes/words-by-collection/words-by-collection";
+import { CollectionsByTypePipe } from "../pipes/collections-by-type/collections-by-type";
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -28,7 +39,16 @@ export const firebaseConfig = {
     MyApp,
     HomePage,
     IntroducePage,
-    LoginPage
+    LoginPage,
+    CollectionsPage,
+    CollectionPage,
+    AddCollectionPage,
+    WordsPage,
+    AddWordPage,
+    CapitalizePipe,
+    ReversePipe,
+    WordsByCollectionPipe,
+    CollectionsByTypePipe
   ],
   imports: [
     BrowserModule,
@@ -42,13 +62,20 @@ export const firebaseConfig = {
     MyApp,
     HomePage,
     IntroducePage,
-    LoginPage
+    LoginPage,
+    CollectionsPage,
+    CollectionPage,
+    AddCollectionPage,
+    WordsPage,
+    AddWordPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    Facebook
+    Facebook,
+    ImagePicker,
+    File
   ]
 })
 export class AppModule {}

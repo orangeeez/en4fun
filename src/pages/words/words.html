@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Words</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="onAddWordClick()">
+        <ion-icon name="md-add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item-group *ngFor="let wordCollection of wordCollections | async">
+       <ion-item-divider color="light">{{ wordCollection.key | capitalize }}</ion-item-divider> 
+      <ion-item-sliding *ngFor="let word of wordCollection | wordsByCollection">
+        <ion-item>
+          <ion-thumbnail item-start>
+            <img src="assets/images/beginner.jpg">
+          </ion-thumbnail>
+          <h2>{{ (word | async)?.$key.capitalize() }}</h2>
+          <p>{{ (word | async)?.translation.capitalize() }}</p>  
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button color="light">
+          <ion-icon name="md-create"></ion-icon>
+          Edit
+        </button>
+          <button ion-button color="light">
+          <ion-icon name="md-trash"></ion-icon>
+          Remove
+        </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-item-group>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add Word</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item class="center">
+      <ion-row>
+        <ion-col col-12>
+          <img src="assets/images/add.jpg"
+            (click)="onAddImageClick()">
+        </ion-col>
+      </ion-row>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Word</ion-label>
+      <ion-input [(ngModel)]="wordKey" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Collections</ion-label>
+      <ion-select [(ngModel)]="selectedCollection">
+         <ng-container *ngFor="let collectionKey of collectionKeys | async"> 
+          <ion-option
+            [value]="collectionKey">{{ collectionKey.$key | capitalize }}
+          </ion-option>
+         </ng-container> 
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>

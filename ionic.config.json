@@ -1,5 +1,8 @@
 {
   "name": "ionicstart",
   "app_id": "8c9f309d",
-  "type": "ionic-angular"
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
 }

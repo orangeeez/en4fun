@@ -44,8 +44,7 @@ export class IntroducePage {
     }
     else {
       return this.afAuth.auth
-        .signInWithPopup(new firebase.auth.FacebookAuthProvider())
-        .then(res => console.log(res));
+        .signInWithPopup(new firebase.auth.FacebookAuthProvider());
     }
   }
 }
