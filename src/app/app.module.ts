@@ -16,6 +16,7 @@ import { CollectionPage } from "../pages/collection/collection";
 import { AddCollectionPage } from "../pages/add-collection/add-collection";
 import { WordsPage } from "../pages/words/words";
 import { AddWordPage } from "../pages/add-word/add-word";
+import { ShareCollectionsPage } from "../pages/share-collections/share-collections";
 import { CapitalizePipe } from "../pipes/capitalize/capitalize";
 import { ReversePipe } from "../pipes/reverse/reverse";
 import { WordsByCollectionPipe } from "../pipes/words-by-collection/words-by-collection";
@@ -45,6 +46,7 @@ export const firebaseConfig = {
     AddCollectionPage,
     WordsPage,
     AddWordPage,
+    ShareCollectionsPage,
     CapitalizePipe,
     ReversePipe,
     WordsByCollectionPipe,
@@ -67,7 +69,8 @@ export const firebaseConfig = {
     CollectionPage,
     AddCollectionPage,
     WordsPage,
-    AddWordPage
+    AddWordPage,
+    ShareCollectionsPage
   ],
   providers: [
     StatusBar,

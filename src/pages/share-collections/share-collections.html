@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Share Collections</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only
+        [disabled]="isCheckmarkDisabled"
+        (click)="onCheckmarkClick()">
+        <ion-icon name="md-checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngFor="let collection of allCollections">
+      <ion-thumbnail item-start>
+        <img [src]="collection.imageURL">
+      </ion-thumbnail>
+      <ion-label>{{ collection.$key | capitalize }}</ion-label>
+      <ion-checkbox [checked]="collection?.checked" item-end
+        (click)="onRadioButtonClick(collection)">
+      </ion-checkbox>
+    </ion-item>
+  </ion-list>
+</ion-content>

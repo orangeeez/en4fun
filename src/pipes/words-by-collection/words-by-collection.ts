@@ -8,10 +8,13 @@ export class WordsByCollectionPipe implements PipeTransform {
   constructor(
     public afDB: AngularFireDatabase) { }
 
-  transform(value) {
+  transform(value, search: string) {
+    search = search.toLowerCase();
     let words = [];
     for (let wordKey of Object.keys(value.val()))
-      words.push(this.afDB.object(`/words/${wordKey}`));
+      if (wordKey.includes(search))
+        words.push(this.afDB.object(`/words/${wordKey}`));
+
     return words;
   }
 }

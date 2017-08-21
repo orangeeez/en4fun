@@ -20,7 +20,6 @@ export class AddCollectionPage {
   type: string;
   action: string;
   name: string;
-  studentKey: any;
   selectedStudents: any[];
   selectedStudentKeys: any[];
   selectedWords: any[];
@@ -43,7 +42,6 @@ export class AddCollectionPage {
       this.selectedStudentKeys = [];
       this.selectedStudents = [];
       this.collection = new Collection();
-      this.studentKey = this.navParams.get('studentKey');
       this.type = this.navParams.get('type');
       this.action = this.navParams.get('action');
       this.collectionKey = this.navParams.get('collectionKey');
@@ -55,11 +53,7 @@ export class AddCollectionPage {
         case 'reading' : break;
       };
 
-      if (this.studentKey)
-        this.selectedStudents.push(this.studentKey);
-
-      if (!this.studentKey)
-        this.studentKeys = this.afDB.list(`/teachers/${Utils.RemoveDots(this.afAuth.auth.currentUser.email)}/students`);
+      this.studentKeys = this.afDB.list(`/teachers/${Utils.RemoveDots(this.afAuth.auth.currentUser.email)}/students`);
       
       if (this.action == 'add')
         this.isStudentsSelected = true;
@@ -113,12 +107,11 @@ export class AddCollectionPage {
       case 'vocabulary' :
         
         // Add new collection to select user
-        if (this.studentKey)
-          this.afDB.database.ref(`/students/${this.studentKey.key}/collections/${this.type}`).child(this.name).set(true);
+        // this.afDB.database.ref(`/students/${this.studentKey.key}/collections/${this.type}`).child(this.name).set(true);
 
         // Add new collection to selected users
-        for (let selectedUser of this.selectedStudents)
-          this.afDB.database.ref(`/students/${selectedUser.$key}/collections/${this.type}`).child(this.name).set(true);
+        for (let selectedStudent of this.selectedStudents)
+          this.afDB.database.ref(`/students/${selectedStudent.key}/collections/${this.type}`).child(this.name).set(true);
 
         // Add new collection to collection array
         this.afDB.database.ref(`/collections/${this.type}`).child(this.name).set(this.collection);
@@ -129,16 +122,16 @@ export class AddCollectionPage {
         // Add words to new collection and set used 'word'
         for (let selectedWord of this.selectedWords) {
           this.afDB.database.ref('/wordCollections').child(this.name).child(selectedWord.$key).set(true);
+          this.afDB.database.ref('/wordCollections/other').child(selectedWord.$key).remove();
           this.wordKeys.update(`${selectedWord.$key}`, { used: true });
         }
 
-        this.navCtrl.push(HomePage);
+        this.navCtrl.pop();
         break;
     }
   }
 
   onAddImageClick() {
-    console.log(this.selectedStudents);
     this.collection.imageURL = this.imageURL;
   }
 }

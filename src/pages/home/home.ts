@@ -7,6 +7,7 @@ import * as firebase from 'firebase/app';
 
 import { CollectionPage } from "../collection/collection";
 import { AddCollectionPage } from "../add-collection/add-collection";
+import { ShareCollectionsPage } from "../share-collections/share-collections";
 import { Utils } from "../../classes/utils";
 
 @Component({
@@ -15,9 +16,8 @@ import { Utils } from "../../classes/utils";
 })
 export class HomePage {
   user: firebase.User;
-  studentsNames: any[] = [{$value : 'All'}];
+  studentsNames: any[] = [{ $value: 'All' }];
   studentKey: any = this.studentsNames[0];
-  collections: FirebaseListObservable<any[]>;
   collectionTypes: FirebaseListObservable<any[]>;
   limits = {
     vocabulary: 2,
@@ -34,48 +34,47 @@ export class HomePage {
     public afDB: AngularFireDatabase,
     public fb: Facebook,
     public platform: Platform) {
-      this.user = afAuth.auth.currentUser;
-      this.afDB.object('/teachers').subscribe(obj => {
-        this.user['type'] = obj.hasOwnProperty(Utils.RemoveDots(this.user.email)) ? 'teachers' : 'students';
+    this.user = afAuth.auth.currentUser;
+    this.afDB.object('/teachers').subscribe(obj => {
+      this.user['type'] = obj.hasOwnProperty(Utils.RemoveDots(this.user.email)) ? 'teachers' : 'students';
 
-        if (this.user['type'] == 'teachers') {
-          this.afDB.list(`/teachers/${Utils.RemoveDots(this.user.email)}/students`)
-            .subscribe(students => {
-              students.forEach(student => {
-                this.afDB.object(`/students/${student.$key}/nickname`)
-                  .subscribe(name => {
-                    name['key'] = student.$key;
-                    this.studentsNames.push(name);
-                  });
-              });
+      if (this.user['type'] == 'teachers') {
+        this.afDB.list(`/teachers/${Utils.RemoveDots(this.user.email)}/students`)
+          .subscribe(students => {
+            students.forEach(student => {
+              this.afDB.object(`/students/${student.$key}/nickname`)
+                .subscribe(name => {
+                  name['key'] = student.$key;
+                  this.studentsNames.push(name);
+                });
             });
-          
-          this.collectionTypes = this.afDB.list('/collectionTypes');
-        }
-      });
+          });
+
+        this.collectionTypes = this.afDB.list('/collectionTypes');
+      }
+    });
   }
 
   onAddCollectionClick(type: string) {
-      this.navCtrl.push(AddCollectionPage, {
-        type: type,
-        action: 'add',
-        studentKey: this.studentKey.$value == 'All' ? undefined : this.studentKey
-      });
+    this.navCtrl.push(AddCollectionPage, {
+      type: type,
+      action: 'add',
+    });
+  }
+
+  onShareCollectionsClick(type: string) {
+    this.navCtrl.push(ShareCollectionsPage, {
+      type: type,
+      studentKey: this.studentKey
+    });
   }
 
   onCollectionClick(collection: any, type: string) {
-    if (collection instanceof FirebaseObjectObservable)
-      collection.subscribe(collection => {
-        this.navCtrl.push(CollectionPage, {
-          type: type,
-          collectionKey: collection.$key
-        });
-      });
-      else 
-        this.navCtrl.push(CollectionPage, {
-          type: type,
-          collectionKey: collection.$key
-        });
+    this.navCtrl.push(CollectionPage, {
+      type: type,
+      collectionKey: collection.$key,
+      studentKey: this.studentKey.$value == 'All' ? undefined : this.studentKey
+    });
   }
 
   onMoreCollectionsClick(type: string) {

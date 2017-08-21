@@ -20,8 +20,12 @@
   <ion-card *ngFor="let collectionType of collectionTypes | async">
     <ion-card-header>
       {{ collectionType.$key | capitalize }}
-      <ion-icon *ngIf="user?.type == 'teachers'" name="add"
+      <ion-icon *ngIf="user?.type == 'teachers' &&
+                       studentKey?.$value == 'All'" name="add"
         (click)="onAddCollectionClick(collectionType.$key)"></ion-icon>
+      <ion-icon *ngIf="user?.type == 'teachers' &&
+                       studentKey?.$value != 'All'" name="md-share"
+        (click)="onShareCollectionsClick(collectionType.$key)"></ion-icon>
     </ion-card-header>
     <ion-grid>
       <ion-row *ngIf="studentKey?.$value == 'All'">
@@ -32,10 +36,10 @@
         </ion-col>
       </ion-row>
         <ion-row *ngIf="studentKey.$value != 'All'">
-          <ion-col *ngFor="let collection of collectionType | collectionsByType: limits[collectionType.$key]: studentKey.key | reverse" col-sm-12 col-md-6 col-lg-4 col-xl-3
+          <ion-col *ngFor="let collection of collectionType | collectionsByType: limits[collectionType.$key]: studentKey.key | reverse" col-6 col-sm-12 col-md-6 col-lg-4 col-xl-3
             (click)="onCollectionClick(collection, collectionType.$key)">
-            <img [src]="(collection | async)?.imageURL">
-            <h4>{{ (collection | async)?.$key.capitalize() }}</h4>  
+            <img [src]="collection.imageURL">
+            <h4>{{ collection.$key.capitalize() }}</h4>  
           </ion-col>
         </ion-row>
     </ion-grid>

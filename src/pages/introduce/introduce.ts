@@ -6,6 +6,7 @@ import * as firebase from 'firebase/app';
 
 import { HomePage } from "../home/home";
 import { LoginPage } from "../login/login";
+import { WordsPage } from "../words/words";
 
 @Component({
   selector: 'page-introduce',
@@ -23,7 +24,7 @@ export class IntroducePage {
       if (!user)
         return;
 
-      this.navCtrl.setRoot(HomePage);
+      this.navCtrl.setRoot(WordsPage);
     });
   }
   
