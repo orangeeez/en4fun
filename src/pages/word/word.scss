@@ -1,0 +1,56 @@
+page-word {
+    .bar-button-md {
+        font-size: 2rem;
+    }
+    img {
+        margin-left: auto;
+        margin-right: auto;
+        width: 40% !important;
+        height: 40% !important;
+    }
+    ion-slides {
+        height: inherit !important;
+    }
+    ion-item {
+        text-align: center !important;
+    }
+    ion-item p {
+        font-size: 1.3rem !important;
+        font-style: italic;
+    }
+    .pronunciation {
+        padding-top: 5px;
+        font-style: normal;
+    }
+    .parts {
+        display: inline;
+        font-style: normal;
+    }
+    .translations {
+        font-size: 14px;
+    }
+    div[class*='wrap'] {
+        white-space: normal;
+        padding-bottom: 10px;
+    }
+    .translations-wrap {}
+    .examples-wrap {
+        white-space: normal;
+        padding-top: 5px;
+        text-align: left;
+    }
+    .definitions-wrap {
+        padding-top: 5px;        
+        text-align: left;
+    }
+    .synonyms-wrap {
+        padding-top: 5px;                
+        font-size: 1.3rem;
+        text-align: left;
+        color: gray;        
+    }
+    .synonyms-wrap p {
+        display: inline;
+    }
+}
+

@@ -1,0 +1,31 @@
+page-content {
+    .toolbar-content .select-ios {
+        font-size: 1.7rem;
+        font-weight: bolder;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin: 0 auto;
+        max-width: 55%;
+    }
+    .toolbar-content .select-md {
+        font-size: 2rem;
+        font-weight: 500;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        max-width: 65%;    
+    }
+    .searchbar-ios {
+        background: white;
+    }
+    .searchbar-ios .searchbar-input {
+        font-size: 1.7rem !important;
+    }
+    .select-close-icon {
+        z-index: 100;
+        min-height: 0 !important;
+        font-size: 15px !important;
+        margin: 0 !important;
+        padding: 10px !important;
+        cursor: pointer;
+    }
+}

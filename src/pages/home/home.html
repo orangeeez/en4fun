@@ -10,33 +10,40 @@
 
 <ion-content padding>
   <ion-card>
-    <ion-item *ngIf="user?.type == 'teachers'">
+    <ion-item *ngIf="user?.type == 'admin' ||
+                     user?.type == 'teacher'">
       <ion-label>Student</ion-label>
       <ion-select [(ngModel)]="studentKey">
-        <ion-option *ngFor="let student of studentsNames" [value]="student" selected>{{ student.$value }}</ion-option>
+        <ng-container *ngFor="let student of studentsNames">
+          <ion-option *ngIf="student.$value" [value]="student" selected>{{ student.$value }}</ion-option>
+        </ng-container>
       </ion-select>
     </ion-item>
   </ion-card>
   <ion-card *ngFor="let collectionType of collectionTypes | async">
     <ion-card-header>
       {{ collectionType.$key | capitalize }}
-      <ion-icon *ngIf="user?.type == 'teachers' &&
+      <ion-icon *ngIf="user?.type == 'admin' &&
                        studentKey?.$value == 'All'" name="add"
         (click)="onAddCollectionClick(collectionType.$key)"></ion-icon>
-      <ion-icon *ngIf="user?.type == 'teachers' &&
-                       studentKey?.$value != 'All'" name="md-share"
+      <ion-icon *ngIf="(user?.type == 'admin' ||
+                        user?.type == 'teacher') &&
+                        studentKey?.$value != 'All'" name="md-share"
         (click)="onShareCollectionsClick(collectionType.$key)"></ion-icon>
     </ion-card-header>
     <ion-grid>
       <ion-row *ngIf="studentKey?.$value == 'All'">
-        <ion-col *ngFor="let collection of collectionType | collectionsByType: limits[collectionType.$key] | async | reverse" col-6 col-sm-12 col-md-6 col-lg-4 col-xl-3 
+        <ion-col *ngFor="let collection of collectionType | collectionsByType: limits[collectionType.$key] | async | reverse" 
+          col-sm-6 col-md-6 col-lg-4 col-xl-3 
           (click)="onCollectionClick(collection, collectionType.$key)">
           <img [src]="collection.imageURL">
-          <h4>{{ collection.$key | capitalize }}</h4> 
+          <h5 *ngIf="collectionType.$key == 'reading'">{{ collection.shortText }}</h5>
+          <h4 *ngIf="collectionType.$key == 'vocabulary'">{{ collection.$key | capitalize }}</h4> 
         </ion-col>
       </ion-row>
         <ion-row *ngIf="studentKey.$value != 'All'">
-          <ion-col *ngFor="let collection of collectionType | collectionsByType: limits[collectionType.$key]: studentKey.key | reverse" col-6 col-sm-12 col-md-6 col-lg-4 col-xl-3
+          <ion-col *ngFor="let collection of collectionType | collectionsByType: limits[collectionType.$key]: studentKey.key | reverse" 
+            col-6 col-sm-12 col-md-6 col-lg-4 col-xl-3
             (click)="onCollectionClick(collection, collectionType.$key)">
             <img [src]="collection.imageURL">
             <h4>{{ collection.$key.capitalize() }}</h4>  

@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { Facebook } from '@ionic-native/facebook';
@@ -10,21 +11,30 @@ import { File } from "@ionic-native/file";
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { IntroducePage } from "../pages/introduce/introduce";
-import { LoginPage } from "../pages/login/login";
 import { CollectionsPage } from "../pages/collections/collections";
 import { CollectionPage } from "../pages/collection/collection";
 import { AddCollectionPage } from "../pages/add-collection/add-collection";
-import { WordsPage } from "../pages/words/words";
+import { ContentPage } from "../pages/content/content";
 import { AddWordPage } from "../pages/add-word/add-word";
 import { ShareCollectionsPage } from "../pages/share-collections/share-collections";
+import { WordPage } from "../pages/word/word";
+import { TeachersPage } from "../pages/teachers/teachers";
+import { StudentsPage } from "../pages/students/students";
 import { CapitalizePipe } from "../pipes/capitalize/capitalize";
 import { ReversePipe } from "../pipes/reverse/reverse";
 import { WordsByCollectionPipe } from "../pipes/words-by-collection/words-by-collection";
 import { CollectionsByTypePipe } from "../pipes/collections-by-type/collections-by-type";
+import { ImageByKeyPipe } from "../pipes/image-by-key/image-by-key";
+import { DependencyByKeyPipe } from "../pipes/dependency-by-key/dependency-by-key";
+import { IsHasTeacherPipe } from "../pipes/is-has-teacher/is-has-teacher";
+import { SpaceCapitalLettersPipe } from "../pipes/space-capital-letters/space-capital-letters";
+import { AddSpaceCharacterPipe } from "../pipes/add-space-character/add-space-character";
+import { SplitByWordPipe } from "../pipes/split-by-word/split-by-word";
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { WordsServiceProvider } from '../providers/words-service/words-service';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAkcmdXMPyklcO0Te2Dcl1BjSELCdJ86ms",
@@ -40,37 +50,48 @@ export const firebaseConfig = {
     MyApp,
     HomePage,
     IntroducePage,
-    LoginPage,
     CollectionsPage,
     CollectionPage,
     AddCollectionPage,
-    WordsPage,
+    ContentPage,
     AddWordPage,
     ShareCollectionsPage,
+    WordPage,
+    TeachersPage,
+    StudentsPage,
     CapitalizePipe,
     ReversePipe,
     WordsByCollectionPipe,
-    CollectionsByTypePipe
+    CollectionsByTypePipe,
+    ImageByKeyPipe,
+    DependencyByKeyPipe,
+    IsHasTeacherPipe,
+    SpaceCapitalLettersPipe,
+    AddSpaceCharacterPipe,
+    SplitByWordPipe
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    HttpModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
     IntroducePage,
-    LoginPage,
     CollectionsPage,
     CollectionPage,
     AddCollectionPage,
-    WordsPage,
+    ContentPage,
     AddWordPage,
-    ShareCollectionsPage
+    ShareCollectionsPage,
+    WordPage,
+    TeachersPage,
+    StudentsPage
   ],
   providers: [
     StatusBar,
@@ -78,7 +99,8 @@ export const firebaseConfig = {
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     Facebook,
     ImagePicker,
-    File
+    File,
+    WordsServiceProvider
   ]
 })
 export class AppModule {}

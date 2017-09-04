@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, Platform } from 'ionic-angular';
 import { Facebook } from '@ionic-native/facebook';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as firebase from 'firebase/app';
 
 import { CollectionPage } from "../collection/collection";
@@ -23,7 +23,7 @@ export class HomePage {
     vocabulary: 2,
     grammar: 2,
     video: 2,
-    reading: 2
+    reading: 1
   }
   studentCollections: any[] = [];
 
@@ -34,13 +34,13 @@ export class HomePage {
     public afDB: AngularFireDatabase,
     public fb: Facebook,
     public platform: Platform) {
-    this.user = afAuth.auth.currentUser;
-    this.afDB.object('/teachers').subscribe(obj => {
-      this.user['type'] = obj.hasOwnProperty(Utils.RemoveDots(this.user.email)) ? 'teachers' : 'students';
+      this.user = afAuth.auth.currentUser;
 
-      if (this.user['type'] == 'teachers') {
-        this.afDB.list(`/teachers/${Utils.RemoveDots(this.user.email)}/students`)
+      if (this.user['type'] == 'admin' ||
+          this.user['type'] == 'teacher') {
+        this.afDB.list(`/teachers/${this.user['enemail']}/students`)
           .subscribe(students => {
+            this.studentsNames.splice(1, this.studentsNames.length);
             students.forEach(student => {
               this.afDB.object(`/students/${student.$key}/nickname`)
                 .subscribe(name => {
@@ -49,10 +49,9 @@ export class HomePage {
                 });
             });
           });
-
+          
         this.collectionTypes = this.afDB.list('/collectionTypes');
       }
-    });
   }
 
   onAddCollectionClick(type: string) {
@@ -72,7 +71,7 @@ export class HomePage {
   onCollectionClick(collection: any, type: string) {
     this.navCtrl.push(CollectionPage, {
       type: type,
-      collectionKey: collection.$key,
+      collection: collection,
       studentKey: this.studentKey.$value == 'All' ? undefined : this.studentKey
     });
   }
@@ -82,7 +81,7 @@ export class HomePage {
       case 'vocabulary': this.limits[type] += 2; break;
       case 'grammar': this.limits[type] += 2; break;
       case 'video': this.limits[type] += 2; break;
-      case 'reading': this.limits[type] += 2; break;
+      case 'reading': this.limits[type] += 1; break;
     };
   }
 }

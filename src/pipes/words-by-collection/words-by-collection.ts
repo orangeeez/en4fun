@@ -13,7 +13,10 @@ export class WordsByCollectionPipe implements PipeTransform {
     let words = [];
     for (let wordKey of Object.keys(value.val()))
       if (wordKey.includes(search))
-        words.push(this.afDB.object(`/words/${wordKey}`));
+        this.afDB.object(`/words/${wordKey}`)
+          .subscribe(word => {
+            words.push(word);
+          });
 
     return words;
   }

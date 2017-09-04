@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Word</ion-title>
+    <ion-buttons end>
+      <button ion-button clear>{{ slides.getActiveIndex() + 1 }}/{{ words.length }}</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-slides>
+    <ion-slide *ngFor="let word of words">
+      <ion-card>
+        <ion-item>
+          <img [src]="word.imageURL">
+          <p class="pronunciation">[{{ word.pronunciation }}]</p>
+          <h2>{{ word.$key | capitalize }}</h2>
+          <p *ngFor="let part of word.parts; let i = index" class="parts">
+            {{ part }}<i *ngIf="word.parts.length - 1 != i">,</i>
+          </p>
+          <div class="translations-wrap">
+            <span *ngFor="let translation of word.translations; let i = index" class="translations">
+              {{ translation }}<i *ngIf="word.translations.length - 1 != i">,</i>
+            </span>
+          </div>
+          <ion-badge>Definitions</ion-badge>
+          <div class="definitions-wrap">
+            <p *ngFor="let definition of word.definitions">
+              {{ definition | capitalize }}
+            </p>
+          </div>
+          <ion-badge>Examples</ion-badge>
+          <div class="examples-wrap">
+            <p *ngFor="let example of word.examples">
+              {{ example | capitalize }}
+            </p>
+          </div>
+          <ion-badge>Synonyms</ion-badge>          
+          <div class="synonyms-wrap">
+            <p *ngFor="let synonym of word.synonyms; let i = index">
+              {{ synonym }}<i *ngIf="word.synonyms.length - 1 != i">,</i>
+            </p>
+          </div>
+        </ion-item>
+      </ion-card>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

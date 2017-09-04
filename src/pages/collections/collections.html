@@ -12,10 +12,10 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content padding>
   <ion-card>
-    <ion-item *ngIf="user?.type == 'teachers'">
+    <ion-item *ngIf="user?.type == 'admin' ||
+                     user?.type == 'teacher'">
       <ion-label>Student</ion-label>
       <ion-select [(ngModel)]="studentKey" (ionChange)="onSelectStudentClick(studentKey)">
         <ion-option *ngFor="let student of studentNames" [value]="student" selected>{{ student.$value }}</ion-option>

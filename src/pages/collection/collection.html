@@ -1,9 +1,10 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{ collectionKey | capitalize }}</ion-title>
-    <ion-buttons *ngIf="user.type == 'teachers'" end>
+    <ion-title>{{ collection.$key | capitalize | spaceCapitalLetters }}</ion-title>
+    <ion-buttons *ngIf="user?.type == 'admin' ||
+                        studentKey" end>
       <button ion-button icon-only 
-        (click)="onMoreClick()"> 
+        (click)="onMoreClick()">
         <ion-icon name="more"></ion-icon>
       </button>
     </ion-buttons>
@@ -12,14 +13,23 @@
 
 
 <ion-content padding>
-  <ion-list>
+  <p *ngFor="let paragraph of paragraphs" class="paragraph">
+    <span #spanWord *ngFor="let word of paragraph | splitByWord" 
+      [innerHTML]="word | addSpaceCharacter"
+      (tap)="onTapWord(spanWord)"></span> 
+  </p>
+  <ion-list *ngIf="type == 'vocabulary'">
     <ion-item-sliding *ngFor="let word of words">
-      <ion-item>
+      <ion-item (click)="onWordClick(word)">
         <ion-thumbnail item-start>
-          <img src="assets/images/beginner.jpg">
+          <img [src]="word.imageURL">
         </ion-thumbnail>
         <h2>{{ word.$key | capitalize }}</h2>
-        <p>{{ word.translation | capitalize }}</p>
+        <p>
+          <i *ngFor="let translation of word.translations; let i = index">
+            {{ translation }}<i *ngIf="word.translations.length - 1 != i">,</i>
+          </i>
+        </p>   
       </ion-item>
       <ion-item-options *ngIf="!studentKey" side="right">
         <button ion-button color="light"
@@ -31,3 +41,11 @@
     </ion-item-sliding>
   </ion-list>
 </ion-content>
+  
+<ion-footer *ngIf="translatedWords.length > 0" no-border>
+  <ion-toolbar>
+    <ion-buttons start *ngFor="let translatedWord of translatedWords"> 
+      <button ion-button>{{ translatedWord[0] }}</button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

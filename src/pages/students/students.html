@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Students</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid *ngIf="user?.type == 'admin'" no-padding>
+    <ion-row>
+      <ion-col>
+        <ion-input [(ngModel)]="email" type="text" placeholder="Email"></ion-input>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-label>Teacher</ion-label>
+          <ion-select [(ngModel)]="teacherKey">
+            <ng-container *ngFor="let teacherKey of teacherKeys | async">
+              <ion-option [value]="teacherKey">
+                {{ teacherKey.$value || teacherKey.$key }}
+              </ion-option>
+            </ng-container>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col col-1>
+        <ion-icon class="add-icon" name="md-add" 
+          [hidden]="!email"
+          (click)="onAddStudentClick()"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-list no-lines>
+    <ion-item-sliding *ngFor="let studentKey of studentKeys | async">
+      <ion-item>
+        <ion-avatar item-start>
+          <img [src]="studentKey.$value == '' ? 'assets/images/image.jpg' : (studentKey | imageByKey: 'student' | async)?.$value">
+        </ion-avatar>
+        <h2>{{ studentKey.$value || studentKey.$key }}</h2>
+        <p *ngFor="let teacherKey of studentKey.$key | dependencyByKey: 'student' | async">{{ teacherKey.$value || teacherKey.$key }}</p>
+        <ion-badge item-end>{{ studentKey?.$value == '' ? 'Pending' : 'Activated' }}</ion-badge>
+      </ion-item>
+      <ion-item-options *ngIf="user?.type == 'admin'" side="right">
+        <button ion-button color="light"
+          (click)="onRemoveStudentClick(studentKey.$key)">
+          <ion-icon name="md-trash"></ion-icon>
+          Remove
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

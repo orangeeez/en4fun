@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Teachers</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid *ngIf="user?.type == 'admin'" no-padding>
+    <ion-row>
+      <ion-col>
+        <ion-input [(ngModel)]="email" type="text" placeholder="Email"></ion-input>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-label>Students</ion-label>
+          <ion-select [(ngModel)]="studentNames" multiple>
+            <ng-container *ngFor="let studentKey of studentKeys | async | isHasTeacher">
+              <ion-option [value]="studentKey">
+                {{ studentKey.$value || studentKey.$key }}
+              </ion-option>
+            </ng-container>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col col-1>
+        <ion-icon class="add-icon" name="md-add" 
+          [hidden]="!email"
+          (click)="onAddTeacherClick()"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-list no-lines>
+    <ion-item-sliding #sliding *ngFor="let teacherKey of teacherKeys | async">
+      <ion-item>
+        <ion-avatar item-start>
+          <img [src]="teacherKey.$value == '' ? 'assets/images/image.jpg' : (teacherKey | imageByKey: 'teacher' | async)?.$value">
+        </ion-avatar>
+        <h2>{{ teacherKey.$value == '' ? teacherKey.$key : teacherKey.$value }}</h2>
+        <p *ngFor="let studentKey of teacherKey.$key | dependencyByKey: 'teacher' | async">{{ studentKey.$value || studentKey.$key }}</p>
+        <ion-badge item-end>{{ teacherKey.$value == '' ? 'Pending' : 'Activated' }}</ion-badge>
+      </ion-item>
+      <ion-item-options *ngIf="user?.type == 'admin'" side="right" (ionSwipe)="onItemSwipe(teacherKey)">
+        <button ion-button color="light">
+          <ion-icon name="md-create"></ion-icon>
+          Edit
+          <ion-select *ngIf="teacherKey?.isEdit" [(ngModel)]="teacherStudentNames[teacherKey.$key]" class="edit-students-select" multiple
+            (ionChange)="onSelectChange(teacherKey, sliding)"
+            (ionCancel)="onSelectCancel(sliding)"
+            (click)="onEditTeacherClick(teacherKey)">
+            <ion-option *ngFor="let studentKey of studentKeys | async let i = index;" 
+              [value]="studentKey" 
+              [selected]="studentCheckedNames[i]" 
+              [disabled]="studentCheckedNames[i] ? false : studentDisabledNames[i]">{{ studentKey.$value || studentKey.$key }}</ion-option>
+          </ion-select>
+        </button>
+        <button ion-button color="light"
+          (click)="onRemoveTeacherClick(teacherKey.$key)">
+          <ion-icon name="md-trash"></ion-icon>
+          Remove
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

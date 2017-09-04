@@ -1,6 +1,15 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Add Word</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only
+        [disabled]="!wordKey ||
+                    !word.imageURL ||
+                    categories.pronunciation == ''"
+        (click)="onCheckmarkClick()">
+        <ion-icon name="md-checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -9,7 +18,7 @@
     <ion-item class="center">
       <ion-row>
         <ion-col col-12>
-          <img src="assets/images/add.jpg"
+          <img [src]="imageURL"
             (click)="onAddImageClick()">
         </ion-col>
       </ion-row>
@@ -17,6 +26,8 @@
     <ion-item>
       <ion-label floating>Word</ion-label>
       <ion-input [(ngModel)]="wordKey" type="text"></ion-input>
+      <ion-badge *ngIf="wordKey" item-end class="wordsapi-icon"
+          (click)="onGetWordClick()">Words API</ion-badge>
     </ion-item>
     <ion-item>
       <ion-label>Collections</ion-label>
@@ -28,5 +39,20 @@
          </ng-container> 
       </ion-select>
     </ion-item>
+    <ion-item>
+      <ion-label floating>Pronunciation</ion-label>
+      <ion-input [(ngModel)]="categories.pronunciation" type="text"></ion-input>
+    </ion-item>
+    <ion-item-group *ngFor="let category of categoryKeys">
+      <ng-container *ngIf="category != 'pronunciation'">
+        <ion-item-divider color="light">{{ category | capitalize }}</ion-item-divider>
+        <ion-item *ngFor="let value of categories[category]">
+          <ion-label>{{ value | capitalize }}</ion-label>
+          <ion-checkbox #checkbox item-end
+            (click)="onRadioButtonClick(category, value, checkbox.checked)">
+          </ion-checkbox>
+        </ion-item>
+      </ng-container>
+    </ion-item-group>
   </ion-list>
 </ion-content>

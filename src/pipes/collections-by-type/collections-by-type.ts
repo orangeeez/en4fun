@@ -27,7 +27,6 @@ export class CollectionsByTypePipe implements PipeTransform {
           this.afDB.object(`/collections/${value.$key}/${type.$key}`)
             .subscribe(collection => {
               if (collections.filter(obj => obj.$key == collection.$key).length == 0)
-                // console.log(collections);
                 collections.push(collection);
             });
         });

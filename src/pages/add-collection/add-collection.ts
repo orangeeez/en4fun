@@ -119,6 +119,9 @@ export class AddCollectionPage {
         // Add new collection to collection keys
         this.afDB.database.ref(`/collectionKeys/${this.type}`).child(this.name).set(true);
         
+        // Add collection template for words
+        this.afDB.database.ref('/wordCollections').child(this.name).set(true);
+
         // Add words to new collection and set used 'word'
         for (let selectedWord of this.selectedWords) {
           this.afDB.database.ref('/wordCollections').child(this.name).child(selectedWord.$key).set(true);

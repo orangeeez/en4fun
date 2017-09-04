@@ -1,15 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, Nav, MenuController} from 'ionic-angular';
+import { Platform, Nav} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
 import * as firebase from 'firebase/app';
-
 import { HomePage } from '../pages/home/home';
 import { IntroducePage } from "../pages/introduce/introduce";
-import { LoginPage } from "../pages/login/login";
-import { WordsPage } from "../pages/words/words";
+import { ContentPage } from "../pages/content/content";
+import { TeachersPage } from "../pages/teachers/teachers";
+import { StudentsPage } from "../pages/students/students";
 import { Utils } from "../classes/utils";
 
 @Component({
@@ -18,15 +18,13 @@ import { Utils } from "../classes/utils";
 
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-
   rootPage: any = IntroducePage;
-  pages: Array<{ title: string, component: any }>;
   user: firebase.User;
+  pages: Array<{ title: string, component: any, hidden: boolean }>;
   badge: string;
 
   constructor(
     public platform: Platform,
-    public menu: MenuController,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     public afAuth: AngularFireAuth,
@@ -35,22 +33,36 @@ export class MyApp {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
-
       afAuth.authState.subscribe(user => {
         if (!user)
           return;
+        
+        this.user = user;
+        let email = Utils.RemoveDots(user.email);
 
-        this.user = afAuth.auth.currentUser;
-        this.afDB.object('/teachers')
-          .subscribe(obj => {
-            this.badge = obj.hasOwnProperty(Utils.RemoveDots(user.email)) ? 'Teach' : 'Study'; 
+        this.afDB.object(`/teachers/${email}/admin`)
+          .subscribe(property => {
+            if (!property.$exists()) 
+              this.badge = 'Study';
+            else if (property.$value)
+              this.badge = 'Admin';
+            else 
+              this.badge = 'Teach';
+
+            this.pages = [
+              { title: 'Home', component: HomePage, hidden: false },
+              { title: 'Teachers', component: TeachersPage, 
+                hidden: this.badge == 'Admin' ||
+                        this.badge == 'Teach' ? false : true },
+              { title: 'Students', component: StudentsPage, 
+                hidden: this.badge == 'Admin' ||
+                        this.badge == 'Teach' ? false : true },        
+              { title: 'Words', component: ContentPage,
+                hidden: this.badge == 'Admin' ||
+                        this.badge == 'Teach' ? false : true }
+            ];
           });
       });
-
-      this.pages = [
-        { title: 'Home', component: HomePage },
-        { title: 'Words', component: WordsPage }
-      ];
     });
   }
 
@@ -60,7 +72,7 @@ export class MyApp {
 
   signOut() {
     this.afAuth.auth.signOut();
-    this.nav.setRoot(LoginPage);
+    this.nav.setRoot(IntroducePage);
   }
 }
 

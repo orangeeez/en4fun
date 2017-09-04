@@ -1,3 +1,39 @@
 page-collection {
-
+    ion-toolbar {
+        background-color: color($colors, light);
+        overflow-x: auto !important;
+    }
+    blockquote {
+        position: relative;
+        margin: 20px 0;
+        padding: 10px 20px;
+        text-align: center;
+        font-size: 17px;
+        margin-left: -10%;
+    }
+    blockquote:before, blockquote:after {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        font-size: 60px;
+        line-height: 1;
+        color: gray;
+    }
+    blockquote:before {
+        top: 0;
+        left: 0;
+        content: "\201C";
+    }
+    blockquote:after {
+        top: 0;
+        right: 0;
+        content: "\201D";
+        margin-right: 8%;
+    }
+    .paragraph {
+        text-indent: 10%;
+    }
+    img {
+        margin-left: -10%;
+    }
 }
