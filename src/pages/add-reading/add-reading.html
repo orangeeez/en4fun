@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add Text</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only
+        [disabled]="!items"
+        (click)="onCheckmarkReadingClick()">
+        <ion-icon name="md-checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <img [src]="imageURL">
+  <ion-item>
+    <ion-label floating>Title</ion-label>
+    <ion-input [(ngModel)]="title"></ion-input>
+  </ion-item>
+  <ion-item>
+      <ion-label>Collections</ion-label>
+      <ion-select [(ngModel)]="selectedCollection">
+         <ng-container *ngFor="let collectionKey of collectionKeys | async"> 
+          <ion-option
+            [value]="collectionKey.$key">{{ collectionKey.$key | capitalize }}
+          </ion-option>
+         </ng-container> 
+      </ion-select>
+    </ion-item>
+  <ng-template #target></ng-template>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons>
+      <button ion-button icon-only
+        (click)="onAddTextClick()">
+        <ion-icon name="md-text"></ion-icon>
+      </button>
+      <button ion-button icon-only
+        (click)="onAddQuoteClick()">
+        <ion-icon name="quote"></ion-icon>
+      </button>
+      <button ion-button icon-only
+        (click)="onAddImageClick()">
+        <ion-icon name="image"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -12,7 +12,7 @@ import { Utils } from "../../classes/utils";
 export class AddWordPage {
   word: Word;
   wordKey: string;
-  imageURL: string = 'https://firebasestorage.googleapis.com/v0/b/en4fun-795ce.appspot.com/o/images%2Fcollections%2Fadd.jpg?alt=media&token=84ac828e-5ca3-4f6e-9d02-058c7a88b608';
+  imageURL: string = 'assets/images/add.jpg';
   collectionKeys: FirebaseListObservable<any[]>
   selectedCollection: any;
   pronunciation: string;

@@ -1,0 +1,7 @@
+<button ion-button icon-only small color="light"
+(click)="onRemoveEditableClick()">
+  <ion-icon name="close"></ion-icon>
+</button>
+<div #quote contenteditable="true" class="blockquote"
+  (input)="content = $event.target.textContent">
+</div>

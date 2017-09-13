@@ -12,7 +12,7 @@ page-content {
         font-weight: 500;
         padding-top: 5px;
         padding-bottom: 5px;
-        max-width: 65%;    
+        max-width: 150px;    
     }
     .searchbar-ios {
         background: white;
@@ -27,5 +27,24 @@ page-content {
         margin: 0 !important;
         padding: 10px !important;
         cursor: pointer;
+    }
+    ion-grid {
+        padding: 0px !important;
+    }
+    ion-col {
+        padding: 0px !important;
+        padding-bottom: 15px !important;     
+    }
+    .reading-item {
+        padding-top: 5px;
+        padding-left: 8px;
+    }
+    .reading-item ion-label {
+        margin: 0;
+        padding-left: 0;
+        white-space: normal;
+    }
+    .reading-item .item-inner {
+        border-bottom: none !important;
     }
 }

@@ -79,9 +79,6 @@
     </platform>
     <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="^4.4.0" />
-    <plugin name="com.synconset.imagepicker" spec="~2.1.8">
-        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="orangeeez" />
-    </plugin>
     <plugin name="cordova-plugin-console" spec="^1.0.5" />
     <plugin name="cordova-plugin-device" spec="^1.1.4" />
     <plugin name="cordova-plugin-facebook4" spec="^1.9.1">

@@ -37,18 +37,18 @@
           col-sm-6 col-md-6 col-lg-4 col-xl-3 
           (click)="onCollectionClick(collection, collectionType.$key)">
           <img [src]="collection.imageURL">
-          <h5 *ngIf="collectionType.$key == 'reading'">{{ collection.shortText }}</h5>
-          <h4 *ngIf="collectionType.$key == 'vocabulary'">{{ collection.$key | capitalize }}</h4> 
+          <!-- <h5 *ngIf="collectionType.$key == 'reading'">{{ collection.shortText }}</h5> -->
+          <h4>{{ collection.$key | capitalize }}</h4> 
         </ion-col>
       </ion-row>
-        <ion-row *ngIf="studentKey.$value != 'All'">
-          <ion-col *ngFor="let collection of collectionType | collectionsByType: limits[collectionType.$key]: studentKey.key | reverse" 
-            col-6 col-sm-12 col-md-6 col-lg-4 col-xl-3
-            (click)="onCollectionClick(collection, collectionType.$key)">
-            <img [src]="collection.imageURL">
-            <h4>{{ collection.$key.capitalize() }}</h4>  
-          </ion-col>
-        </ion-row>
+      <ion-row *ngIf="studentKey.$value != 'All'">
+        <ion-col *ngFor="let collection of collectionType | collectionsByType: limits[collectionType.$key]: studentKey.key | reverse" 
+          col-sm-6 col-md-6 col-lg-4 col-xl-3 
+          (click)="onCollectionClick(collection, collectionType.$key)">
+          <img [src]="collection.imageURL">
+          <h4>{{ collection.$key.capitalize() }}</h4>  
+        </ion-col>
+      </ion-row>
     </ion-grid>
     <button class="card-more" ion-button small clear
       (click)="onMoreCollectionsClick(collectionType.$key)">More</button>

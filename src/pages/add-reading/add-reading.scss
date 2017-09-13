@@ -1,0 +1,47 @@
+page-add-reading {
+  ion-footer button {
+    width: 30%;
+  }
+  .text {
+    padding: 5px;
+  }
+  reading-text [contenteditable=true]:empty:before {
+    content: attr(placeholder);
+    display: block;
+    color: gray;
+  }
+  reading-text [contenteditable=true] p {
+    margin: 0 10px;
+    text-indent: 10%;
+  }
+  reading-image img {
+    display: block;
+    margin: auto;
+    max-height: 180px;
+  }
+  .blockquote {
+    position: relative;
+    margin: 10px 10px;
+    padding: 10px 25px;
+    text-align: center;
+    font-size: 17px;
+  }
+  .blockquote:before, .blockquote:after {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    font-size: 60px;
+    line-height: 1;
+    color: gray;
+  }
+  .blockquote:before {
+    top: 0;
+    left: 0;
+    content: "\201C";
+  }
+  .blockquote:after {
+    top: 0;
+    right: 0;
+    content: "\201D";
+  }
+}

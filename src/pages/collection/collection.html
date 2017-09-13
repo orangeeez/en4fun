@@ -13,11 +13,21 @@
 
 
 <ion-content padding>
-  <p *ngFor="let paragraph of paragraphs" class="paragraph">
-    <span #spanWord *ngFor="let word of paragraph | splitByWord" 
-      [innerHTML]="word | addSpaceCharacter"
-      (tap)="onTapWord(spanWord)"></span> 
-  </p>
+  <!-- READING -->
+  <ion-grid *ngIf="type == 'reading'">
+    <ion-card  *ngFor="let reading of readings">
+      <ion-row>
+        <ion-col col-12>
+          <ion-item class="reading-item" (click)="onReadingClick(reading)">
+            <img [src]="reading.imageURL">
+            <h5>{{ reading.shortText }}</h5>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+  </ion-card>
+        
+  </ion-grid>
+  <!-- VOCABULARY -->
   <ion-list *ngIf="type == 'vocabulary'">
     <ion-item-sliding *ngFor="let word of words">
       <ion-item (click)="onWordClick(word)">
@@ -41,11 +51,3 @@
     </ion-item-sliding>
   </ion-list>
 </ion-content>
-  
-<ion-footer *ngIf="translatedWords.length > 0" no-border>
-  <ion-toolbar>
-    <ion-buttons start *ngFor="let translatedWord of translatedWords"> 
-      <button ion-button>{{ translatedWord[0] }}</button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-footer>

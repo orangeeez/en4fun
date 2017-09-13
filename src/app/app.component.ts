@@ -57,7 +57,7 @@ export class MyApp {
               { title: 'Students', component: StudentsPage, 
                 hidden: this.badge == 'Admin' ||
                         this.badge == 'Teach' ? false : true },        
-              { title: 'Words', component: ContentPage,
+              { title: 'Content', component: ContentPage,
                 hidden: this.badge == 'Admin' ||
                         this.badge == 'Teach' ? false : true }
             ];

@@ -1,11 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
+import { TitleCasePipe } from "@angular/common";
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { Facebook } from '@ionic-native/facebook';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { ImagePicker } from '@ionic-native/image-picker';
 import { File } from "@ionic-native/file";
 
 import { MyApp } from './app.component';
@@ -20,6 +20,9 @@ import { ShareCollectionsPage } from "../pages/share-collections/share-collectio
 import { WordPage } from "../pages/word/word";
 import { TeachersPage } from "../pages/teachers/teachers";
 import { StudentsPage } from "../pages/students/students";
+import { ReadingPage } from "../pages/reading/reading";
+import { AddReadingPage, ReadingText, ReadingImage, ReadingQuote } from "../pages/add-reading/add-reading";
+
 import { CapitalizePipe } from "../pipes/capitalize/capitalize";
 import { ReversePipe } from "../pipes/reverse/reverse";
 import { WordsByCollectionPipe } from "../pipes/words-by-collection/words-by-collection";
@@ -30,11 +33,13 @@ import { IsHasTeacherPipe } from "../pipes/is-has-teacher/is-has-teacher";
 import { SpaceCapitalLettersPipe } from "../pipes/space-capital-letters/space-capital-letters";
 import { AddSpaceCharacterPipe } from "../pipes/add-space-character/add-space-character";
 import { SplitByWordPipe } from "../pipes/split-by-word/split-by-word";
+import { ReadingsByCollectionPipe } from "../pipes/readings-by-collection/readings-by-collection";
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { WordsServiceProvider } from '../providers/words-service/words-service';
+import { SafePipe } from "../pipes/safe/safe";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAkcmdXMPyklcO0Te2Dcl1BjSELCdJ86ms",
@@ -59,6 +64,8 @@ export const firebaseConfig = {
     WordPage,
     TeachersPage,
     StudentsPage,
+    ReadingPage,
+    AddReadingPage,
     CapitalizePipe,
     ReversePipe,
     WordsByCollectionPipe,
@@ -68,7 +75,12 @@ export const firebaseConfig = {
     IsHasTeacherPipe,
     SpaceCapitalLettersPipe,
     AddSpaceCharacterPipe,
-    SplitByWordPipe
+    SplitByWordPipe,
+    ReadingsByCollectionPipe,
+    SafePipe,
+    ReadingText,
+    ReadingImage,
+    ReadingQuote
   ],
   imports: [
     BrowserModule,
@@ -91,16 +103,22 @@ export const firebaseConfig = {
     ShareCollectionsPage,
     WordPage,
     TeachersPage,
-    StudentsPage
+    StudentsPage,
+    ReadingPage,
+    AddReadingPage,
+    ReadingText,
+    ReadingImage,
+    ReadingQuote
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     Facebook,
-    ImagePicker,
     File,
-    WordsServiceProvider
+    WordsServiceProvider,
+    SpaceCapitalLettersPipe,
+    TitleCasePipe
   ]
 })
 export class AppModule {}

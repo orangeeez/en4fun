@@ -1,39 +1,21 @@
 page-collection {
-    ion-toolbar {
-        background-color: color($colors, light);
-        overflow-x: auto !important;
+    ion-grid {
+        padding: 0px !important;
     }
-    blockquote {
-        position: relative;
-        margin: 20px 0;
-        padding: 10px 20px;
-        text-align: center;
-        font-size: 17px;
-        margin-left: -10%;
+    ion-col {
+        padding: 0px !important;
+        padding-bottom: 15px !important;     
     }
-    blockquote:before, blockquote:after {
-        position: absolute;
-        width: 30px;
-        height: 30px;
-        font-size: 60px;
-        line-height: 1;
-        color: gray;
+    .reading-item {
+        padding-top: 5px;
+        padding-left: 8px;
     }
-    blockquote:before {
-        top: 0;
-        left: 0;
-        content: "\201C";
+    .reading-item ion-label {
+        margin: 0;
+        padding-left: 0;
+        white-space: normal;
     }
-    blockquote:after {
-        top: 0;
-        right: 0;
-        content: "\201D";
-        margin-right: 8%;
-    }
-    .paragraph {
-        text-indent: 10%;
-    }
-    img {
-        margin-left: -10%;
+    .reading-item .item-inner {
+        border-bottom: none !important;
     }
 }

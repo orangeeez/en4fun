@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ reading.$key | capitalize | spaceCapitalLetters }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <img [src]="reading.imageURL">
+  <p *ngFor="let paragraph of paragraphs" class="paragraph">
+    <span #spanWord *ngFor="let word of paragraph | splitByWord" 
+      [innerHTML]="word | addSpaceCharacter"
+      (tap)="onTapWord(spanWord)"></span> 
+  </p>
+</ion-content>
+  
+<ion-footer *ngIf="translatedWords.length > 0" no-border>
+  <ion-toolbar>
+    <ion-buttons start *ngFor="let translatedWord of translatedWords"> 
+      <button ion-button>{{ translatedWord[0] }}</button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

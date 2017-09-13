@@ -5,6 +5,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { AddCollectionPage } from "../add-collection/add-collection";
 import { HomePage } from "../home/home";
 import { WordPage } from "../word/word";
+import { ReadingPage } from "../reading/reading";
 import { WordsServiceProvider } from "../../providers/words-service/words-service";
 import * as firebase from 'firebase/app';
 
@@ -19,10 +20,8 @@ export class CollectionPage {
   studentKey: any;
   collection: any;
   words: any[];
-  translatedWords: any[];
-  paragraphs: string[];
+  readings: any[];
   text: string[];
-  selectedWord: any;
 
   constructor(
     public navCtrl: NavController,
@@ -30,10 +29,9 @@ export class CollectionPage {
     public afAuth: AngularFireAuth,
     public afDB: AngularFireDatabase,
     public actionSheetCtrl: ActionSheetController,
-    public alertCtrl: AlertController,
-    public wordService: WordsServiceProvider) {
+    public alertCtrl: AlertController) {
+      this.readings = [];
       this.words = [];
-      this.translatedWords = [];
       this.user = this.afAuth.auth.currentUser;
       this.type = this.navParams.get('type');
       this.studentKey = this.navParams.get('studentKey');
@@ -53,10 +51,24 @@ export class CollectionPage {
             });
           break;
         case 'reading' :
-            let isTag;
-            this.paragraphs = this.collection.text.split("<p>");      
-            break;
+          this.afDB.object(`readingCollections/${this.collection.$key}`)
+          .subscribe(readingCollection => {
+            this.readings = [];
+            if (readingCollection.$exists())
+              for (let readingKey in readingCollection)
+                this.afDB.object(`readings/${readingKey}`)
+                  .subscribe(reading => {
+                    this.readings.push(reading);
+                  });
+          });
+          break;
        }
+  }
+
+  onReadingClick(reading) {
+    this.navCtrl.push(ReadingPage, {
+      reading: reading
+    });
   }
 
   onWordClick(word) {
@@ -81,8 +93,7 @@ export class CollectionPage {
         this.onEditClick();
       }
     }; 
-    let removeButton = 
-      {
+    let removeButton = {
       text: 'Remove',
         role: 'destructive',
         handler: () => {
@@ -99,7 +110,6 @@ export class CollectionPage {
       buttons: buttons
     });
     this.moreSheet.present();
-
   }
 
   onEditClick() {
@@ -153,29 +163,5 @@ export class CollectionPage {
       ]
     });
     confirm.present();
-  }
-
-  onTapWord(spanWord) {
-    if (!this.selectedWord) {
-      this.selectedWord = spanWord;
-      this.selectedWord.style.color = '#488aff';
-      this.wordService.translateWord(spanWord.innerHTML, this.translateCallback.bind(this, this.translatedWords));
-    }
-    else if (this.selectedWord == spanWord) {
-      this.selectedWord.style.color = 'black';
-      this.selectedWord = undefined;
-      this.translatedWords = [];
-    }
-    else {
-      this.selectedWord.style.color = 'black';
-      this.selectedWord = undefined;
-      this.translatedWords = [];
-      this.onTapWord(spanWord);
-    }
-  }
-
-  translateCallback(translatedWords, word) {
-    if (word.translations) 
-      translatedWords.push.apply(translatedWords, word.translations[0].translations);
   }
 }
