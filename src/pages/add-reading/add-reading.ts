@@ -1,5 +1,5 @@
 import { Component, ComponentFactoryResolver, ViewContainerRef, ViewChild, Output, EventEmitter, ElementRef, ComponentRef, AfterViewInit } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Content } from 'ionic-angular';
 import { AngularFireDatabase } from "angularfire2/database";
 import { FirebaseListObservable } from "angularfire2/database";
 
@@ -8,6 +8,7 @@ import { FirebaseListObservable } from "angularfire2/database";
   templateUrl: 'add-reading.html'
 })
 export class AddReadingPage implements AfterViewInit {
+  @ViewChild(Content) content: Content;
   @ViewChild('target', { read: ViewContainerRef }) target: ViewContainerRef;
   type: string;
   title: string;
@@ -34,16 +35,19 @@ export class AddReadingPage implements AfterViewInit {
       this.title = this.reading.$key;
       this.selectedCollection = this.navParams.get('collectionKey');
       this.afDB.database.ref(`readingTexts/${this.reading.$key}`).once('value')
-        .then(text => this.parseReading(text.val()));
+        .then(text => {
+          this.parseReading(text.val());
+          this.content.scrollToTop();
+        });
     }
   }
 
   onAddTextClick(value) {
     const factory = this.componentFactoryResolver.resolveComponentFactory(ReadingText);
     const ref = this.target.createComponent(factory);
-    ref.changeDetectorRef.detectChanges();
     ref.instance.field.nativeElement.id = this.counter++;
     ref.instance._ref = ref;
+    ref.changeDetectorRef.detectChanges();
     ref.instance.field.nativeElement.focus();
     ref.instance.fieldEmitter.subscribe(content => {});
     ref.instance.removeEmitter.subscribe(id => this.items = this.items.filter(item => item.id !== id));
@@ -89,9 +93,9 @@ export class AddReadingPage implements AfterViewInit {
       switch (item.className) {
         case 'text': 
           text = item.innerHTML.replace(/<br>/g, '');
-          text = text.replace(/<div>/g, '<p>');
+          text = text.replace(/<div>/g, '');
           text = text.replace(/<\/div>/g, '');
-          this.text += '<reading>' + '<p>' + text + '</reading>';
+          this.text += '<p><reading>' + text + '</reading></p>';
 
           if (!isShortText) {
             isShortText = true;
@@ -99,10 +103,10 @@ export class AddReadingPage implements AfterViewInit {
           }
           break;
         case 'blockquote':
-          this.text += '<blockquote>' + item.innerHTML + '</blockquote>';
+          this.text += '<p><blockquote>' + item.innerHTML + '</blockquote></p>';
           break;
         case 'image':
-          this.text += item.outerHTML + '</img>';
+          this.text += '<p>' + item.outerHTML + '</img></p>';
           break;
       }
 

@@ -2,7 +2,7 @@
   (click)="onRemoveEditableClick()">
     <ion-icon name="close"></ion-icon>
 </button>
-<div #field contenteditable="true" class="text" placeholder="Enter text here..."
+<div #field contenteditable="true" class="text"
   (keydown)="onFieldKeydownClick($event)"
   (input)="content = $event.target.textContent"
   (paste)="onFieldPasteClick($event)">

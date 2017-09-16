@@ -11,12 +11,16 @@ export class ReadingsByCollectionPipe implements PipeTransform {
     search = search.toLowerCase();
     let readings = [];
     for (let readingKey of Object.keys(value.val()))
-      if (readingKey.includes(search))
-        this.afDB.object(`/readings/${readingKey}`)
-          .subscribe(reading => {
+      if (readingKey.includes(search)) {
+        let ref = this.afDB.object(`/readings/${readingKey}`)
+          ref.subscribe(reading => {
             readings.push(reading);
           });
-
+          ref.$ref.on('child_changed', child => {
+            let index = readings.findIndex(obj => obj.$key == child.ref.parent.key);
+            readings.splice(index, 1);
+          });
+        }
     return readings;
   }
 }

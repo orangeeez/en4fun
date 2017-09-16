@@ -5,11 +5,6 @@ page-add-reading {
   .text {
     padding: 5px;
   }
-  reading-text [contenteditable=true]:empty:before {
-    content: attr(placeholder);
-    display: block;
-    color: gray;
-  }
   reading-text [contenteditable=true] p {
     margin: 0 10px;
     text-indent: 10%;

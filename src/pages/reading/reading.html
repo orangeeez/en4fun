@@ -7,8 +7,8 @@
 
 <ion-content>
   <img [src]="reading.imageURL">
-  <p *ngFor="let paragraph of paragraphs" class="paragraph">
-    <span #spanWord *ngFor="let word of paragraph | splitByWord" 
+  <p *ngFor="let item of items" class="paragraph">
+    <span #spanWord *ngFor="let word of item | splitByWord" 
       [innerHTML]="word | addSpaceCharacter"
       (tap)="onTapWord(spanWord)"></span> 
   </p>

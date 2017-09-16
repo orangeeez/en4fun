@@ -11,9 +11,9 @@ export class SplitByWordPipe implements PipeTransform {
     for (let i = 0; i < text.length; i++) {
       // If element in array is tag, join until tag will be closed
       if (isTag) {
-        if (text[i].includes('>')) {
+        if (text[i].includes('</img>') || 
+            text[i].includes('</blockquote>')) 
           isTag = false;
-        }
 
         var removed = text.splice(i, 1);
         text[--i] += ' ' + removed[0];
@@ -21,7 +21,7 @@ export class SplitByWordPipe implements PipeTransform {
       }
       // Check if element in array is HTML tag
       if (text[i].includes('<img') ||
-        text[i].includes('<blockquote'))
+          text[i].includes('<blockquote>'))
         isTag = true;
     }
     return text;

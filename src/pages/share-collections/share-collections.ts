@@ -52,9 +52,6 @@ export class ShareCollectionsPage {
       this.sharedCollections.push(collection);
       this.removedCollections = this.removedCollections.filter(obj => obj.$key != collection.$key);            
     }
-
-    console.log(this.sharedCollections);
-    console.log(this.removedCollections);    
   }
 
   onCheckmarkClick() {

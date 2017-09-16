@@ -12,7 +12,7 @@ import * as firebase from 'firebase/app'
 export class ReadingPage {
   user: firebase.User;
   reading: any;
-  paragraphs: string[];
+  items: string[];
   translatedWords: any[];
   selectedWord: any;  
   
@@ -27,10 +27,13 @@ export class ReadingPage {
       this.reading = this.navParams.get('reading');
 
       this.afDB.database.ref(`readingTexts/${this.reading.$key}`).once('value')
-        .then(text => this.paragraphs = text.val().split("<p>"));
-    }
+        .then(text => this.items = text.val().match(/<p>(.*?)<\/p>/g).map(function(value) {
+          value = value.replace(/<\/?p>|<\/?p>/g,'');          
+          return value;
+       }));
+    } 
 
-    onTapWord(spanWord) {
+  onTapWord(spanWord: HTMLSpanElement) {
     if (!this.selectedWord) {
       this.selectedWord = spanWord;
       this.selectedWord.style.color = '#488aff';
@@ -47,7 +50,7 @@ export class ReadingPage {
       this.translatedWords = [];
       this.onTapWord(spanWord);
     }
-  }
+  } 
 
   translateCallback(translatedWords, word) {
     if (word.translations) 

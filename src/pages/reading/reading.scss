@@ -34,4 +34,12 @@ page-reading {
         margin: 0 10px;
         text-indent: 10%;
     }
+    .paragraph img {
+        margin-left: -10%;
+        pointer-events: none;
+    }
+    .paragraph blockquote {
+        margin-left: -10%;
+        pointer-events: none;        
+    }
 }
