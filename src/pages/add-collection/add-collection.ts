@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
-import { File } from "@ionic-native/file";
 import { NavController, NavParams, Platform } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { HomePage } from "../../pages/home/home";
 import { Collection } from "../../classes/collection";
-import { Utils } from "../../classes/utils";
-import { FirebaseApp } from 'angularfire2';
 import 'firebase/storage';
 
 @Component({
@@ -34,9 +30,7 @@ export class AddCollectionPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public afAuth: AngularFireAuth,
-    public afDB: AngularFireDatabase,
-    public firebaseApp: FirebaseApp,
-    public file: File) {
+    public afDB: AngularFireDatabase) {
       this.selectedWords = [];
       this.selectedReadings = [];
       this.selectedStudents = [];
@@ -54,7 +48,7 @@ export class AddCollectionPage {
         case 'reading' : this.readingKeys = this.afDB.list('/readingKeys'); break;
       };
 
-      this.studentKeys = this.afDB.list(`/teachers/${Utils.RemoveDots(this.afAuth.auth.currentUser.email)}/students`);
+      this.studentKeys = this.afDB.list(`/teachers/${this.afAuth.auth.currentUser['enemail']}/students`);
       
       if (this.action == 'add')
         this.isStudentsSelected = true;
@@ -115,6 +109,14 @@ export class AddCollectionPage {
                 this.afDB.database.ref('/readingCollections/other').child(selectedWord.$key).remove();
                 this.readingKeys.update(`${selectedWord.$key}`, { used: true });
               }
+            break;
+
+            case 'video' :
+              this.afDB.database.ref('/videoCollections').child(this.name).set(true);
+            break;
+
+            case 'grammar' :
+              this.afDB.database.ref(`/grammarCollections`).child(this.name).set(true);
             break;
           }
           this.navCtrl.pop();

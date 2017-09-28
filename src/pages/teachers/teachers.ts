@@ -47,6 +47,7 @@ export class TeachersPage {
 
     this.afDB.database.ref(`/teachers/${this.email}/admin`).set(false);
     this.afDB.database.ref(`/teacherKeys/${this.email}`).set('');
+    this.afDB.database.ref(`/teacherPlaylists/${this.email}`).set('');    
     this.teacherStudentNames[this.email] = [];
     this.email = '';
     this.studentNames = [];

@@ -2,6 +2,7 @@ import { Component, ComponentFactoryResolver, ViewContainerRef, ViewChild, Outpu
 import { NavController, NavParams, Content } from 'ionic-angular';
 import { AngularFireDatabase } from "angularfire2/database";
 import { FirebaseListObservable } from "angularfire2/database";
+import { Utils } from "../../classes/utils";
 
 @Component({
   selector: 'page-add-reading',
@@ -110,6 +111,8 @@ export class AddReadingPage implements AfterViewInit {
           break;
       }
 
+      this.title = Utils.FormatUniqueKeys(this.title);
+
       if (this.selectedCollection) {
         this.afDB.database.ref(`readingCollections/${this.selectedCollection}/${this.title}`).set(true);
         this.afDB.database.ref(`/readingKeys/${this.title}`).set({ used: true });
@@ -142,10 +145,8 @@ export class AddReadingPage implements AfterViewInit {
         value = item.replace(/<\/?blockquote>|<\/?blockquote>/g,''); 
         this.onAddQuoteClick(value);
       }
-      else if (item.startsWith('<img')) {
-        var regex = /<img.*?src="([^">]*\/([^">]*?))".*?>/g;
+      else if (item.startsWith('<img'))
         this.onAddImageClick(value);
-      }
     }
   }
 }

@@ -18,15 +18,15 @@
     <ion-input [(ngModel)]="title"></ion-input>
   </ion-item>
   <ion-item>
-      <ion-label>Collections</ion-label>
-      <ion-select [(ngModel)]="selectedCollection">
-         <ng-container *ngFor="let collectionKey of collectionKeys | async"> 
-          <ion-option
-            [value]="collectionKey.$key">{{ collectionKey.$key | capitalize }}
-          </ion-option>
-         </ng-container> 
-      </ion-select>
-    </ion-item>
+    <ion-label>Collections</ion-label>
+    <ion-select [(ngModel)]="selectedCollection">
+      <ng-container *ngFor="let collectionKey of collectionKeys | async"> 
+        <ion-option
+          [value]="collectionKey.$key">{{ collectionKey.$key | capitalize }}
+        </ion-option>
+      </ng-container> 
+    </ion-select>
+  </ion-item>
   <ng-template #target></ng-template>
 </ion-content>
 

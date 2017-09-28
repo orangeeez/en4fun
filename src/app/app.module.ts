@@ -7,6 +7,7 @@ import { Facebook } from '@ionic-native/facebook';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { File } from "@ionic-native/file";
+import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -22,6 +23,8 @@ import { TeachersPage } from "../pages/teachers/teachers";
 import { StudentsPage } from "../pages/students/students";
 import { ReadingPage } from "../pages/reading/reading";
 import { AddReadingPage, ReadingText, ReadingImage, ReadingQuote } from "../pages/add-reading/add-reading";
+import { AddVideoPage } from "../pages/add-video/add-video";
+import { VideoPage } from "../pages/video/video";
 
 import { CapitalizePipe } from "../pipes/capitalize/capitalize";
 import { ReversePipe } from "../pipes/reverse/reverse";
@@ -34,6 +37,9 @@ import { SpaceCapitalLettersPipe } from "../pipes/space-capital-letters/space-ca
 import { AddSpaceCharacterPipe } from "../pipes/add-space-character/add-space-character";
 import { SplitByWordPipe } from "../pipes/split-by-word/split-by-word";
 import { ReadingsByCollectionPipe } from "../pipes/readings-by-collection/readings-by-collection";
+import { ParseDatePipe } from "../pipes/parse-date/parse-date";
+import { VideosByCollectionPipe } from "../pipes/videos-by-collection/videos-by-collection";
+import { SafeHtmlDirective } from "../directives/safe-html/safe-html";
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -66,6 +72,8 @@ export const firebaseConfig = {
     StudentsPage,
     ReadingPage,
     AddReadingPage,
+    AddVideoPage,
+    VideoPage,
     CapitalizePipe,
     ReversePipe,
     WordsByCollectionPipe,
@@ -78,9 +86,12 @@ export const firebaseConfig = {
     SplitByWordPipe,
     ReadingsByCollectionPipe,
     SafePipe,
+    ParseDatePipe,
+    VideosByCollectionPipe,
     ReadingText,
     ReadingImage,
-    ReadingQuote
+    ReadingQuote,
+    SafeHtmlDirective
   ],
   imports: [
     BrowserModule,
@@ -106,6 +117,8 @@ export const firebaseConfig = {
     StudentsPage,
     ReadingPage,
     AddReadingPage,
+    AddVideoPage,
+    VideoPage,
     ReadingText,
     ReadingImage,
     ReadingQuote
@@ -118,7 +131,8 @@ export const firebaseConfig = {
     File,
     WordsServiceProvider,
     SpaceCapitalLettersPipe,
-    TitleCasePipe
+    TitleCasePipe,
+    YoutubeVideoPlayer
   ]
 })
 export class AppModule {}

@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, Platform, Slides } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { NavController, NavParams, Platform } from 'ionic-angular';
 import { Facebook } from '@ionic-native/facebook';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -58,7 +58,7 @@ export class IntroducePage {
                 }
                 else {
                   user['type'] = 'student';
-                  this.navCtrl.setRoot(ContentPage);
+                  this.navCtrl.setRoot(HomePage);
                 }
               });
 
@@ -87,7 +87,7 @@ export class IntroducePage {
                 else
                   user['type'] = 'teacher';
 
-                this.navCtrl.setRoot(ContentPage);
+                this.navCtrl.setRoot(HomePage);
                 ref.$ref.off();
               });
           }

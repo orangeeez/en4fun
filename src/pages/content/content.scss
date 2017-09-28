@@ -4,29 +4,18 @@ page-content {
         font-weight: bolder;
         padding-top: 5px;
         padding-bottom: 5px;
-        margin: 0 auto;
-        max-width: 55%;
+        text-align: center;
+        max-width: 100%;
     }
     .toolbar-content .select-md {
         font-size: 2rem;
         font-weight: 500;
         padding-top: 5px;
         padding-bottom: 5px;
-        max-width: 150px;    
+        max-width: 100%;        
     }
-    .searchbar-ios {
-        background: white;
-    }
-    .searchbar-ios .searchbar-input {
-        font-size: 1.7rem !important;
-    }
-    .select-close-icon {
-        z-index: 100;
-        min-height: 0 !important;
-        font-size: 15px !important;
-        margin: 0 !important;
-        padding: 10px !important;
-        cursor: pointer;
+    .toolbar-content .select-icon {
+        visibility: hidden;
     }
     ion-grid {
         padding: 0px !important;
@@ -46,5 +35,24 @@ page-content {
     }
     .reading-item .item-inner {
         border-bottom: none !important;
+    }
+    .video-item {
+        padding-top: 5px;
+        padding-left: 8px;
+    }
+    .video-item ion-label {
+        margin: 0;
+        padding-left: 0;
+        white-space: normal;
+    }
+    .video-item p {
+        font-size: 1.2rem !important;
+    }
+    .play-button {
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        color: white;
+        font-size: 3em;
     }
 }

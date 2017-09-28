@@ -8,7 +8,6 @@ import * as firebase from 'firebase/app';
 import { CollectionPage } from "../collection/collection";
 import { AddCollectionPage } from "../add-collection/add-collection";
 import { ShareCollectionsPage } from "../share-collections/share-collections";
-import { Utils } from "../../classes/utils";
 
 @Component({
   selector: 'page-home',

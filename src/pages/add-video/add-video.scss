@@ -1,0 +1,54 @@
+page-add-video {
+    .video-item {
+        padding-top: 5px;
+        padding-left: 8px;
+    }
+    .video-item ion-label {
+        margin: 0;
+        padding-left: 0;
+        white-space: normal;
+    }
+    .video-item p {
+        font-size: 1.2rem !important;
+    }
+    ion-grid {
+        padding: 0px !important;
+    }
+    ion-col {
+        padding: 0px !important;
+        padding-bottom: 15px !important;     
+    }
+    .play-button {
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        color: white;
+        font-size: 3em;
+    }
+    .video-checkbox {
+        display: block;
+        padding-top: 5px;
+        padding-right: 8px;
+    }
+    .video-checkbox .checkbox-icon {
+        margin-left: auto;
+    }
+    .toolbar-content .select-ios {
+        font-size: 1.7rem;
+        font-weight: bolder;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        text-align: center;
+        max-width: 100%;
+    }
+    .toolbar-content .select-md {
+        font-size: 2rem;
+        font-weight: 500;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        max-width: 100%;        
+    }
+    .toolbar-content .select-icon {
+        visibility: hidden;
+    }
+}

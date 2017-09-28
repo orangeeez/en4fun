@@ -5,7 +5,7 @@
     </button>
     <ion-select [(ngModel)]="collectionType" (ionChange)="onSelectCollectionType()" interface="popover">
       <ion-option *ngFor="let collectionType of collectionTypes | async; let i = index" [value]="collectionType.key"
-        [selected]="collectionType.key === 'reading'">
+        [selected]="collectionType.key === 'video'">
         {{ collectionType.key | capitalize }}
       </ion-option>
     </ion-select>
@@ -19,14 +19,14 @@
 
 
 <ion-content padding>
+  <ion-card *ngIf="platform.is('ios'); else other">
+    <ion-searchbar [(ngModel)]="search"></ion-searchbar>
+  </ion-card>
+  <ng-template #other>
+    <ion-searchbar [(ngModel)]="search"></ion-searchbar>    
+  </ng-template> 
   <!-- VOCABULARY -->
   <ng-container *ngIf="collectionType == 'vocabulary'">
-    <ion-card *ngIf="platform.is('ios'); else other">
-      <ion-searchbar [(ngModel)]="search"></ion-searchbar>
-    </ion-card>
-    <ng-template #other>
-      <ion-searchbar [(ngModel)]="search"></ion-searchbar>    
-    </ng-template> 
     <ion-list>
       <ion-card>  
         <ion-item>
@@ -36,7 +36,8 @@
                 [value]="collectionKey.key">{{ collectionKey.key | capitalize }}</ion-option>
           </ion-select>
           <ion-icon *ngIf="collection != ''"item-end name="md-close" class="select-close-icon"
-            (click)="onRemoveSelectClick()"></ion-icon>
+            (click)="onRemoveSelectClick()">
+          </ion-icon>
         </ion-item>
       </ion-card>
       <ion-item-group *ngFor="let wordCollection of wordCollections | async">
@@ -70,12 +71,6 @@
   
   <!-- READING -->
   <ng-container *ngIf="collectionType == 'reading'">
-    <ion-card *ngIf="platform.is('ios'); else other">
-      <ion-searchbar [(ngModel)]="search"></ion-searchbar>
-    </ion-card>
-    <ng-template #other>
-      <ion-searchbar [(ngModel)]="search"></ion-searchbar>    
-    </ng-template> 
     <ion-list>
       <ion-card>  
         <ion-item>
@@ -91,17 +86,59 @@
     </ion-list>
     <ion-grid>
       <ion-item-group *ngFor="let readingCollection of readingCollections | async">
-      <ion-item-divider color="light">{{ readingCollection.key | capitalize }}</ion-item-divider>
-        <ion-card *ngFor="let reading of readingCollection | readingsByCollection: search">
-          <ion-row>
-            <ion-col col-12>
-              <ion-item class="reading-item" (click)="onReadingClick(reading, readingCollection.key)">
-                <img [src]="reading.imageURL">
-                <h5>{{ reading.shortText }}</h5>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-        </ion-card>
+        <ng-container *ngIf="collection == readingCollection.key ||
+                           collection == ''">
+        <ion-item-divider color="light">{{ readingCollection.key | capitalize }}</ion-item-divider>
+          <ion-card *ngFor="let reading of readingCollection | readingsByCollection: search">
+            <ion-row>
+              <ion-col col-12>
+                <ion-item class="reading-item" (click)="onReadingClick(reading, readingCollection.key)">
+                  <img [src]="reading.imageURL">
+                  <h5>{{ reading.shortText }}</h5>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-card>
+        </ng-container>
+      </ion-item-group>
+    </ion-grid>
+  </ng-container>
+
+  <!-- VIDEO -->
+  <ng-container *ngIf="collectionType == 'video'">
+    <ion-list>
+      <ion-card>  
+        <ion-item>
+          <ion-label>Collection</ion-label>
+          <ion-select [(ngModel)]="collection">
+              <ion-option *ngFor="let videoCollection of videoCollections | async" 
+                [value]="videoCollection.key">{{ videoCollection.key | capitalize }}</ion-option>
+          </ion-select>
+          <ion-icon *ngIf="collection != ''"item-end name="md-close" class="select-close-icon"
+            (click)="onRemoveSelectClick()"></ion-icon>
+        </ion-item>
+      </ion-card>
+    </ion-list>
+    <ion-grid>
+      <ion-item-group *ngFor="let videoCollection of videoCollections | async">
+        <ng-container *ngIf="collection == videoCollection.key ||
+                            collection == ''">
+        <ion-item-divider color="light">{{ videoCollection.key | capitalize }}</ion-item-divider>
+          <ion-card *ngFor="let video of videoCollection | videosByCollection"
+            (press)="onVideoPressClick(video, videoCollection)">
+            <ion-row>
+              <ion-col col-12>
+                <ion-item class="video-item" 
+                  (click)="onPlayVideoClick(video.id)">
+                  <img [src]="video.thumbnails.high.url">
+                  <ion-icon name="play" class="play-button"></ion-icon>
+                  <h5>{{ video.title }}</h5>
+                  <p>{{ video.publishedAt | parseDate | date: 'medium'}}</p>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-card>
+        </ng-container>
       </ion-item-group>
     </ion-grid>
   </ng-container>

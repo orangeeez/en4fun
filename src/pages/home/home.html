@@ -37,7 +37,6 @@
           col-sm-6 col-md-6 col-lg-4 col-xl-3 
           (click)="onCollectionClick(collection, collectionType.$key)">
           <img [src]="collection.imageURL">
-          <!-- <h5 *ngIf="collectionType.$key == 'reading'">{{ collection.shortText }}</h5> -->
           <h4>{{ collection.$key | capitalize }}</h4> 
         </ion-col>
       </ion-row>

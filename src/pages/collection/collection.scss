@@ -18,4 +18,23 @@ page-collection {
     .reading-item .item-inner {
         border-bottom: none !important;
     }
+    .video-item {
+        padding-top: 5px;
+        padding-left: 8px;
+    }
+    .video-item ion-label {
+        margin: 0;
+        padding-left: 0;
+        white-space: normal;
+    }
+    .video-item p {
+        font-size: 1.2rem !important;
+    }
+    .play-button {
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        color: white;
+        font-size: 3em;
+    }
 }

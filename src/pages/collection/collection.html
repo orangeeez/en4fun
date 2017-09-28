@@ -24,9 +24,9 @@
           </ion-item>
         </ion-col>
       </ion-row>
-  </ion-card>
-        
+    </ion-card>    
   </ion-grid>
+
   <!-- VOCABULARY -->
   <ion-list *ngIf="type == 'vocabulary'">
     <ion-item-sliding *ngFor="let word of words">
@@ -50,4 +50,21 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
+
+  <!-- VIDEO -->
+  <ion-grid *ngIf="type == 'video'">
+    <ion-card *ngFor="let video of videos | videosByCollection: collection.$key">
+      <ion-row>
+        <ion-col col-12>
+          <ion-item class="video-item">
+            <img [src]="video.thumbnails.high.url"
+              (click)="onPlayVideoClick(video.id)">
+            <ion-icon name="play" class="play-button"></ion-icon>
+            <h5 (click)="onTitleVideoClick(video)">{{ video.title }}</h5>
+            <p>{{ video.publishedAt | parseDate | date: 'medium'}}</p>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </ion-grid>
 </ion-content>

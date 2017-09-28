@@ -1,6 +1,9 @@
 ion-list .item-inner {
     border-bottom: none !important;
 }
+ion-item .item-inner {
+    border-bottom: none !important;
+}
 ion-badge {
     font-size: 10px;
     margin: 0 !important;
@@ -10,4 +13,18 @@ ion-item-options {
 }
 .center {
     text-align: center;
+}
+.searchbar-ios {
+    background: white;
+}
+.searchbar-ios .searchbar-input {
+    font-size: 1.7rem !important;
+}
+.select-close-icon {
+    z-index: 100;
+    min-height: 0 !important;
+    font-size: 15px !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    cursor: pointer;
 }

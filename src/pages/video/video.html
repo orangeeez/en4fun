@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title></ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ng-container>
+  <img [src]="video.thumbnails.high.url"
+    (click)="onPlayVideoClick(video.id)">
+  <ion-icon name="play" class="play-button"></ion-icon>
+  </ng-container>
+</ion-content>

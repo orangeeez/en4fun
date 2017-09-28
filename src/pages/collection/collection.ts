@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ActionSheetController, AlertController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AddCollectionPage } from "../add-collection/add-collection";
-import { HomePage } from "../home/home";
 import { WordPage } from "../word/word";
 import { ReadingPage } from "../reading/reading";
-import { WordsServiceProvider } from "../../providers/words-service/words-service";
+import { VideoPage } from "../video/video";
+import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player';
 import * as firebase from 'firebase/app';
 
 @Component({
@@ -21,6 +21,7 @@ export class CollectionPage {
   collection: any;
   words: any[];
   readings: any[];
+  videos: FirebaseListObservable<any[]>;
   text: string[];
 
   constructor(
@@ -29,7 +30,8 @@ export class CollectionPage {
     public afAuth: AngularFireAuth,
     public afDB: AngularFireDatabase,
     public actionSheetCtrl: ActionSheetController,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    public youtubePlayer: YoutubeVideoPlayer) {
       this.readings = [];
       this.words = [];
       this.user = this.afAuth.auth.currentUser;
@@ -49,19 +51,22 @@ export class CollectionPage {
                       this.words.push(word);
                     });
             });
-          break;
+        break;
         case 'reading' :
           this.afDB.object(`readingCollections/${this.collection.$key}`)
-          .subscribe(readingCollection => {
-            this.readings = [];
-            if (readingCollection.$exists())
-              for (let readingKey in readingCollection)
-                this.afDB.object(`readings/${readingKey}`)
-                  .subscribe(reading => {
-                    this.readings.push(reading);
-                  });
-          });
-          break;
+            .subscribe(readingCollection => {
+              this.readings = [];
+              if (readingCollection.$exists())
+                for (let readingKey in readingCollection)
+                  this.afDB.object(`readings/${readingKey}`)
+                    .subscribe(reading => {
+                      this.readings.push(reading);
+                    });
+           });
+        break;
+        case 'video' :
+          this.videos = this.afDB.list(`videoCollections/${this.collection.$key}`);
+        break;
        }
   }
 
@@ -83,6 +88,16 @@ export class CollectionPage {
     this.afDB.database.ref(`/wordCollections/other`).child(word.$key).set(true);
     this.afDB.database.ref(`/wordCollections/${this.collection.$key}/${word.$key}`).remove();
     this.afDB.database.ref(`/wordKeys/${word.$key}`).set({ used: false });
+  }
+
+  onPlayVideoClick(id: string) {
+    this.youtubePlayer.openVideo(id);
+  }
+
+  onTitleVideoClick(video) {
+    this.navCtrl.push(VideoPage, {
+      video: video
+    });
   }
 
   onMoreClick() {

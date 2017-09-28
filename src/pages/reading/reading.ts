@@ -28,7 +28,7 @@ export class ReadingPage {
 
       this.afDB.database.ref(`readingTexts/${this.reading.$key}`).once('value')
         .then(text => this.items = text.val().match(/<p>(.*?)<\/p>/g).map(function(value) {
-          value = value.replace(/<\/?p>|<\/?p>/g,'');          
+          value = value.replace(/<\/?p>|<\/?p>/g, '');  
           return value;
        }));
     } 

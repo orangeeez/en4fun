@@ -29,4 +29,14 @@ export class Utils  {
         categories.translations.push.apply(categories.translations, word.target.synonyms);
         return;
     }
+    static FormatUniqueKeys(text: string): string {
+        var splited = text.split(' ');
+        for (var i = 0; i < splited.length; i++) {
+            if (i === 0)
+                splited[i] = splited[i].charAt(0).toLowerCase() + splited[i].slice(1);
+            else
+                splited[i] = splited[i].charAt(0).toUpperCase() + splited[i].slice(1);
+        }
+        return text = splited.join('');
+    }
 }

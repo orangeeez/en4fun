@@ -11,7 +11,7 @@ export class ReadingsByCollectionPipe implements PipeTransform {
     search = search.toLowerCase();
     let readings = [];
     for (let readingKey of Object.keys(value.val()))
-      if (readingKey.includes(search)) {
+      if (readingKey.toLowerCase().includes(search)) {
         let ref = this.afDB.object(`/readings/${readingKey}`)
           ref.subscribe(reading => {
             readings.push(reading);
