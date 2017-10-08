@@ -9,8 +9,11 @@ export class VideosByCollectionPipe implements PipeTransform {
   constructor() {
     this.youtube = new YouTube('AIzaSyAkcmdXMPyklcO0Te2Dcl1BjSELCdJ86ms');
   }
-  transform(value, collection) {
+  transform(value, search, collection) {
     var videos = [];
+
+    if (search)
+      search = search.toLowerCase();
     
     if (collection) {
       value.subscribe(videoKeys => {
@@ -18,9 +21,11 @@ export class VideosByCollectionPipe implements PipeTransform {
         videoKeys.forEach(videoKey => {
           this.youtube.getVideoByID(videoKey.$value)
             .then(video => {
-              videos.push(video);
+              console.log(video.title);
+              // if (video.title.toLowerCase().includes(search))    
+                videos.push(video);
             });
-        })
+        });
       });
     }
       
@@ -28,8 +33,10 @@ export class VideosByCollectionPipe implements PipeTransform {
       value.val().forEach((id, key) => {
         this.youtube.getVideoByID(id)
           .then(video => {
-            video['key'] = key;
-            videos.push(video);
+            if (video.title.toLowerCase().includes(search)) {
+              video['key'] = key;
+              videos.push(video);
+            }
           });
       });
     }

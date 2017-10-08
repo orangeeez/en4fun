@@ -17,7 +17,7 @@
       <ion-thumbnail item-start>
         <img [src]="collection.imageURL">
       </ion-thumbnail>
-      <ion-label>{{ collection.$key | capitalize }}</ion-label>
+      <ion-label>{{ collection.$key | capitalize | spaceCapitalLetters }}</ion-label>
       <ion-checkbox [checked]="collection?.checked" item-end
         (click)="onRadioButtonClick(collection)">
       </ion-checkbox>

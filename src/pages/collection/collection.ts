@@ -7,6 +7,7 @@ import { WordPage } from "../word/word";
 import { ReadingPage } from "../reading/reading";
 import { VideoPage } from "../video/video";
 import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player';
+import { GrammarPage } from "../grammar/grammar";
 import * as firebase from 'firebase/app';
 
 @Component({
@@ -22,7 +23,10 @@ export class CollectionPage {
   words: any[];
   readings: any[];
   videos: FirebaseListObservable<any[]>;
+  grammars: FirebaseListObservable<any[]>;
   text: string[];
+  segment: string = 'trainings';
+  trainings: any;
 
   constructor(
     public navCtrl: NavController,
@@ -55,17 +59,24 @@ export class CollectionPage {
         case 'reading' :
           this.afDB.object(`readingCollections/${this.collection.$key}`)
             .subscribe(readingCollection => {
+              console.log(readingCollection);
               this.readings = [];
               if (readingCollection.$exists())
-                for (let readingKey in readingCollection)
+                for (let readingKey in readingCollection) {
                   this.afDB.object(`readings/${readingKey}`)
                     .subscribe(reading => {
                       this.readings.push(reading);
                     });
+                  }
            });
         break;
         case 'video' :
           this.videos = this.afDB.list(`videoCollections/${this.collection.$key}`);
+        break;
+        case 'grammar' :
+          this.grammars = this.afDB.list(`grammarCollections/${this.collection.$key}`);
+          this.trainings = [{ name: 'sentence constructor', imageURL: 'assets/images/constructor.png', type: 'constructor' },
+                            { name: 'sentence insertion', imageURL: 'assets/images/insertion.png', type: 'insertion' }]
         break;
        }
   }
@@ -135,6 +146,26 @@ export class CollectionPage {
     });
   };
 
+  onGrammarClick(grammar) {
+    this.navCtrl.push(GrammarPage, {
+      type: 'content',
+      grammar: grammar
+    });
+  }
+
+  onTrainingClick(training) {
+    this.navCtrl.push(GrammarPage, {
+      type: training.type,
+      collection: this.collection.$key
+    })
+  }
+
+  onRemoveGrammarClick(collection, grammar) {
+    this.afDB.database.ref(`/grammarKeys/${grammar.$key}`).remove();
+    this.afDB.database.ref(`/grammars/${grammar.$key}`).remove();
+    this.afDB.database.ref(`/grammarCollections/${collection.key}/${grammar.$key}`).remove();
+  }
+
   onRemoveClick() {
     let confirm = this.alertCtrl.create({
       title: 'Remove Collection',
@@ -158,10 +189,26 @@ export class CollectionPage {
             // Remove collection from collections 
             this.afDB.database.ref(`/collections/${this.type}/${this.collection.$key}`).remove();
 
-            // Unused words used in collection
-            for (let word of this.words) {
-              this.afDB.database.ref(`/wordCollections/${this.collection.$key}`).remove();
-              this.afDB.database.ref(`/wordKeys/${word.$key}`).update({ used: false });
+            switch (this.type) {
+              case 'grammar' :
+                this.afDB.database.ref(`/grammarCollections/${this.collection.$key}`).remove();
+              break;
+
+              case 'vocabulary' :
+                // Unused words used in collection
+                for (let word of this.words) {
+                  this.afDB.database.ref(`/wordCollections/${this.collection.$key}`).remove();
+                  this.afDB.database.ref(`/wordKeys/${word.$key}`).update({ used: false });
+                }
+              break;
+
+              case 'video' :
+                this.afDB.database.ref(`/videoCollections/${this.collection.$key}`).remove();              
+              break;
+
+              case 'reading' :
+                this.afDB.database.ref(`/readingCollections/${this.collection.$key}`).remove();              
+              break;
             }
 
             // Remove collection from students

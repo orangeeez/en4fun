@@ -9,6 +9,7 @@ import { SpaceCapitalLettersPipe } from "../../pipes/space-capital-letters/space
 import { ReadingPage } from "../reading/reading";
 import { AddReadingPage } from "../add-reading/add-reading";
 import { AddVideoPage } from "../add-video/add-video";
+import { AddGrammarPage } from "../add-grammar/add-grammar";
 import * as firebase from 'firebase/app';
 
 @Component({
@@ -20,8 +21,9 @@ export class ContentPage {
   collectionTypes: FirebaseListObservable<any[]>;
   wordCollections: FirebaseListObservable<any[]>;
   readingCollections: FirebaseListObservable<any[]>;
-  videoCollections: FirebaseListObservable<any[]>;  
-  collectionType: string = 'video';
+  videoCollections: FirebaseListObservable<any[]>;
+  grammarCollections: FirebaseListObservable<any[]>;  
+  collectionType: string = 'grammar';
   words: any[] = [];
   search: string = ""
   collection: string = "";
@@ -54,6 +56,9 @@ export class ContentPage {
         case 'video' : 
           this.navCtrl.push(AddVideoPage);
           break;
+        case 'grammar' :
+          this.navCtrl.push(AddGrammarPage);
+        break;
       }
     }
 
@@ -77,6 +82,9 @@ export class ContentPage {
           break;
         case 'video' :
           this.videoCollections = this.afDB.list(`/videoCollections`, { preserveSnapshot: true });
+          break;
+        case 'grammar' : 
+          this.grammarCollections = this.afDB.list(`/grammarCollections`, { preserveSnapshot: true });
           break;
       }
     }
@@ -136,7 +144,7 @@ export class ContentPage {
           {
             text: 'Yes',
             handler: () => {
-              this.afDB.database.ref(`readingCollections/${collectionKey}/${reading.$key}`).remove();
+              this.afDB.database.ref(`/readingCollections/${collectionKey}/${reading.$key}`).remove();
               this.afDB.database.ref(`/readings/${reading.$key}`).remove();
               this.afDB.database.ref(`/readingTexts/${reading.$key}`).remove();
               this.afDB.database.ref(`/readingKeys/${reading.$key}`).remove();              
@@ -168,5 +176,19 @@ export class ContentPage {
         ]
       });
       confirm.present();
-    }3
+    }
+
+    onEditGrammarClick(collection, grammar) {
+      this.navCtrl.push(AddGrammarPage, {
+        edit: true,
+        grammar: grammar,
+        collection: collection
+      });
+    }
+
+    onRemoveGrammarClick(collection, grammar) {
+      this.afDB.database.ref(`/grammarKeys/${grammar.$key}`).remove();
+      this.afDB.database.ref(`/grammars/${grammar.$key}`).remove();
+      this.afDB.database.ref(`/grammarCollections/${collection.key}/${grammar.$key}`).remove();
+    }
 }

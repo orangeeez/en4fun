@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Grammar</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list class="center">
+    <ion-item text-wrap class="translation">
+      <h1>{{ grammars[grammarIndex]?.translation }}</h1>
+    </ion-item>
+    <ion-item text-wrap class="sentence">
+      <h3>{{ grammars[grammarIndex]?.isLearned ? grammars[grammarIndex]?.sentence : result }}</h3>
+      <button *ngIf="!grammars[grammarIndex]?.isLearned" ion-button clear icon-left class="backspace-button"
+        [disabled]="index == 0"
+        (click)="onBackspaceClick()">
+        <ion-icon name="backspace"></ion-icon>
+      </button>
+    </ion-item>
+    <ion-grid *ngIf="this.words?.length != this.index">
+      <ion-row>
+        <ion-col *ngFor="let option of options; let i = index" col-6 class="column">
+            <button ion-button full clear color="dark"
+              (click)="onOptionClick(option, i)">{{ option | uppercase }}</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <button *ngIf="type == 'trainings'" ion-button round outline
+      [disabled]="this.words?.length != this.index"
+      (click)="onNextClick()">Next</button>
+  </ion-list>
+</ion-content>

@@ -3,6 +3,7 @@ import { NavController, NavParams, Platform } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { Collection } from "../../classes/collection";
+import { Utils } from "../../classes/utils";
 import 'firebase/storage';
 
 @Component({
@@ -78,6 +79,7 @@ export class AddCollectionPage {
   }
 
   onCheckmarkCollectionClick() {
+        this.name = Utils.FormatUniqueKeys(this.name);
         // Add new collection to selected users
         for (let selectedStudent of this.selectedStudents)
           this.afDB.database.ref(`/students/${selectedStudent.key}/collections/${this.type}`).child(this.name).set(true);

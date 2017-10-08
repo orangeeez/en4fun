@@ -13,11 +13,19 @@
 
 
 <ion-content padding>
+  <ion-segment *ngIf="type == 'grammar'" [(ngModel)]="segment" style="padding-bottom: 10px">
+    <ion-segment-button value="trainings">
+      Trainings
+    </ion-segment-button>
+    <ion-segment-button value="content">
+      Content
+    </ion-segment-button>
+  </ion-segment>
   <!-- READING -->
   <ion-grid *ngIf="type == 'reading'">
     <ion-card  *ngFor="let reading of readings">
       <ion-row>
-        <ion-col col-12>
+        <ion-col col-12 class="col-reading">
           <ion-item class="reading-item" (click)="onReadingClick(reading)">
             <img [src]="reading.imageURL">
             <h5>{{ reading.shortText }}</h5>
@@ -53,9 +61,9 @@
 
   <!-- VIDEO -->
   <ion-grid *ngIf="type == 'video'">
-    <ion-card *ngFor="let video of videos | videosByCollection: collection.$key">
+    <ion-card *ngFor="let video of videos | videosByCollection: undefined: collection.$key">
       <ion-row>
-        <ion-col col-12>
+        <ion-col col-12 class="col-video">
           <ion-item class="video-item">
             <img [src]="video.thumbnails.high.url"
               (click)="onPlayVideoClick(video.id)">
@@ -67,4 +75,38 @@
       </ion-row>
     </ion-card>
   </ion-grid>
+
+  <!-- GRAMMAR -->
+  <ion-list *ngIf="type == 'grammar' && segment == 'content'">
+    <ion-item-sliding *ngFor="let grammar of grammars | async | grammarsByCollection: undefined: collection.$key">
+      <ion-item
+        (click)="onGrammarClick(grammar)">
+        <h2 *ngIf="grammar.translation">{{ grammar.translation | capitalize }}</h2>
+        <p *ngIf="grammar.sentence"> {{ grammar.isLearned ? grammar.sentence : '&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;' }}</p>
+        <ion-badge item-end>
+          {{ grammar?.isLearned ? 'Learned' : 'Not learned' }}
+        </ion-badge>
+      </ion-item>
+      <ion-item-options *ngIf="user?.type == 'admin'" side="right">
+        <button ion-button color="light"
+          (click)="onRemoveGrammarClick(collection.$key, grammar, studentKey)">
+        <ion-icon name="md-trash"></ion-icon>
+        Remove
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <ion-card *ngIf="type == 'grammar' && segment == 'trainings'">
+    <ion-grid>
+      <ion-row>
+        <ion-col *ngFor="let training of trainings" class="col-grammar"
+          col-6 col-lg-4 col-xl-3 
+          (click)="onTrainingClick(training)">
+            <img [src]="training.imageURL">
+            <h2>{{ training.name | capitalize }}</h2>
+            <p>23 sentences more</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
 </ion-content>

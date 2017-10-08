@@ -77,6 +77,7 @@ export class AddWordPage {
     }
 
     translateCallback(word, categories) {
+      console.log(word);
       Utils.ParseGoogleTranslateWord(word, categories);
     }
 }

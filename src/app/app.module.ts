@@ -25,6 +25,8 @@ import { ReadingPage } from "../pages/reading/reading";
 import { AddReadingPage, ReadingText, ReadingImage, ReadingQuote } from "../pages/add-reading/add-reading";
 import { AddVideoPage } from "../pages/add-video/add-video";
 import { VideoPage } from "../pages/video/video";
+import { AddGrammarPage } from "../pages/add-grammar/add-grammar";
+import { GrammarPage } from "../pages/grammar/grammar";
 
 import { CapitalizePipe } from "../pipes/capitalize/capitalize";
 import { ReversePipe } from "../pipes/reverse/reverse";
@@ -39,6 +41,7 @@ import { SplitByWordPipe } from "../pipes/split-by-word/split-by-word";
 import { ReadingsByCollectionPipe } from "../pipes/readings-by-collection/readings-by-collection";
 import { ParseDatePipe } from "../pipes/parse-date/parse-date";
 import { VideosByCollectionPipe } from "../pipes/videos-by-collection/videos-by-collection";
+import { GrammarsByCollectionPipe } from "../pipes/grammars-by-collection/grammars-by-collection";
 import { SafeHtmlDirective } from "../directives/safe-html/safe-html";
 
 import { AngularFireModule } from 'angularfire2';
@@ -74,6 +77,8 @@ export const firebaseConfig = {
     AddReadingPage,
     AddVideoPage,
     VideoPage,
+    AddGrammarPage,
+    GrammarPage,
     CapitalizePipe,
     ReversePipe,
     WordsByCollectionPipe,
@@ -88,6 +93,7 @@ export const firebaseConfig = {
     SafePipe,
     ParseDatePipe,
     VideosByCollectionPipe,
+    GrammarsByCollectionPipe,
     ReadingText,
     ReadingImage,
     ReadingQuote,
@@ -119,6 +125,8 @@ export const firebaseConfig = {
     AddReadingPage,
     AddVideoPage,
     VideoPage,
+    AddGrammarPage,
+    GrammarPage,
     ReadingText,
     ReadingImage,
     ReadingQuote
@@ -131,6 +139,7 @@ export const firebaseConfig = {
     File,
     WordsServiceProvider,
     SpaceCapitalLettersPipe,
+    GrammarsByCollectionPipe,
     TitleCasePipe,
     YoutubeVideoPlayer
   ]

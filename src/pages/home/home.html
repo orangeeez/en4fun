@@ -34,18 +34,18 @@
     <ion-grid>
       <ion-row *ngIf="studentKey?.$value == 'All'">
         <ion-col *ngFor="let collection of collectionType | collectionsByType: limits[collectionType.$key] | async | reverse" 
-          col-sm-6 col-md-6 col-lg-4 col-xl-3 
+          col-6 col-lg-4 col-xl-3 
           (click)="onCollectionClick(collection, collectionType.$key)">
           <img [src]="collection.imageURL">
-          <h4>{{ collection.$key | capitalize }}</h4> 
+          <h4>{{ collection.$key | capitalize | spaceCapitalLetters }}</h4> 
         </ion-col>
       </ion-row>
       <ion-row *ngIf="studentKey.$value != 'All'">
         <ion-col *ngFor="let collection of collectionType | collectionsByType: limits[collectionType.$key]: studentKey.key | reverse" 
-          col-sm-6 col-md-6 col-lg-4 col-xl-3 
+          col-6 col-lg-4 col-xl-3 
           (click)="onCollectionClick(collection, collectionType.$key)">
           <img [src]="collection.imageURL">
-          <h4>{{ collection.$key.capitalize() }}</h4>  
+          <h4>{{ collection.$key | capitalize | spaceCapitalLetters }}</h4>  
         </ion-col>
       </ion-row>
     </ion-grid>

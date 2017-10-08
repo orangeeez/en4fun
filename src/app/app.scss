@@ -28,3 +28,12 @@ ion-item-options {
     padding: 10px !important;
     cursor: pointer;
 }
+.list-ios > .item-block:last-child, .list-ios > .item-wrapper:last-child .item-block {
+    border-bottom: none;
+}
+.list-ios > .item-block:first-child {
+    border-top: none;
+}
+.center {
+    text-align: center;
+}

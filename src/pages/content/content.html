@@ -25,6 +25,7 @@
   <ng-template #other>
     <ion-searchbar [(ngModel)]="search"></ion-searchbar>    
   </ng-template> 
+  
   <!-- VOCABULARY -->
   <ng-container *ngIf="collectionType == 'vocabulary'">
     <ion-list>
@@ -114,7 +115,7 @@
               <ion-option *ngFor="let videoCollection of videoCollections | async" 
                 [value]="videoCollection.key">{{ videoCollection.key | capitalize }}</ion-option>
           </ion-select>
-          <ion-icon *ngIf="collection != ''"item-end name="md-close" class="select-close-icon"
+          <ion-icon *ngIf="collection != ''" item-end name="md-close" class="select-close-icon"
             (click)="onRemoveSelectClick()"></ion-icon>
         </ion-item>
       </ion-card>
@@ -124,7 +125,7 @@
         <ng-container *ngIf="collection == videoCollection.key ||
                             collection == ''">
         <ion-item-divider color="light">{{ videoCollection.key | capitalize }}</ion-item-divider>
-          <ion-card *ngFor="let video of videoCollection | videosByCollection"
+          <ion-card *ngFor="let video of videoCollection | videosByCollection: search"
             (press)="onVideoPressClick(video, videoCollection)">
             <ion-row>
               <ion-col col-12>
@@ -142,4 +143,46 @@
       </ion-item-group>
     </ion-grid>
   </ng-container>
+
+  <!-- GRAMMAR -->
+  <ng-container *ngIf="collectionType == 'grammar'">
+    <ion-list>
+      <ion-card>  
+        <ion-item>
+          <ion-label>Collection</ion-label>
+          <ion-select [(ngModel)]="collection">
+              <ion-option *ngFor="let grammarCollection of grammarCollections | async" 
+                [value]="grammarCollection.key">{{ grammarCollection.key | capitalize | spaceCapitalLetters }}</ion-option>
+          </ion-select>
+          <ion-icon *ngIf="collection != ''" item-end name="md-close" class="select-close-icon"
+            (click)="onRemoveSelectClick()">
+          </ion-icon>
+        </ion-item>
+      </ion-card>
+      <ion-item-group *ngFor="let grammarCollection of grammarCollections | async">
+        <ng-container *ngIf="collection == grammarCollection.key ||
+                             collection == ''">
+          <ion-item-divider color="light">{{ grammarCollection.key | capitalize | spaceCapitalLetters }}</ion-item-divider> 
+          <ion-item-sliding *ngFor="let grammar of grammarCollection | grammarsByCollection: search">
+            <ion-item>
+              <h2 *ngIf="grammar.sentence">{{ grammar.sentence | capitalize }}</h2>
+              <p *ngIf="grammar.translation">{{ grammar.translation | capitalize }}</p>
+            </ion-item>
+            <ion-item-options *ngIf="user?.type == 'admin'" side="right">
+              <button ion-button color="light"
+                (click)="onEditGrammarClick(grammarCollection, grammar)">
+                <ion-icon name="md-create"></ion-icon>
+                Edit
+              </button>
+              <button ion-button color="light"
+                (click)="onRemoveGrammarClick(grammarCollection, grammar)">
+              <ion-icon name="md-trash"></ion-icon>
+              Remove
+            </button>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ng-container>
+      </ion-item-group>
+    </ion-list>
+  </ng-container>    
 </ion-content>

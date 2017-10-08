@@ -1,4 +1,4 @@
-export class Utils  {
+export class Utils {
     static RemoveDots(value: string): string {
         return value.split('.').join("");
     }

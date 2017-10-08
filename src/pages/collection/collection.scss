@@ -2,9 +2,23 @@ page-collection {
     ion-grid {
         padding: 0px !important;
     }
-    ion-col {
+    .col-reading {
         padding: 0px !important;
         padding-bottom: 15px !important;     
+    }
+    .col-video {
+        padding: 0px !important;
+        padding-bottom: 15px !important;     
+    }
+    .col-grammar {
+        text-align: center;
+    }
+    .col-grammar p {
+        color: #666 !important;
+    }
+    .col-grammar img {
+        width: 40%;
+        margin: 0 auto;
     }
     .reading-item {
         padding-top: 5px;

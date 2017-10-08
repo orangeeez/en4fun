@@ -60,7 +60,8 @@ export class AddVideoPage {
         self.youtube.searchVideos(self.search)
           .then(videos => {
             self.searchVideos = videos;
-            self.onSelectColectionChange();
+            if (this.selectedCollection)
+              self.onSelectColectionChange();
           });
       }, 500);
     }
