@@ -4,7 +4,8 @@
     <ion-buttons end>
       <button ion-button icon-only
         (click)="onCheckmarkClick()"
-        >
+        [disabled]="!grammar.sentence ||
+                    !grammar.translation">
         <ion-icon name="md-checkmark"></ion-icon>
       </button>
     </ion-buttons>

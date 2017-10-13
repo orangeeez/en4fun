@@ -26,8 +26,6 @@ export class AddGrammarPage {
   }
 
   onCheckmarkClick() {
-    /*
-
     // IF add grammar entity
     if (!this.isEdit) {
       this.afDB.database.ref(`/grammarCollections/${this.selectedCollection}`).push(true)
@@ -56,8 +54,5 @@ export class AddGrammarPage {
       }
     }
     this.navCtrl.pop();
-
-
-    */
   }
 }

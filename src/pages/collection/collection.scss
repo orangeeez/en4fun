@@ -2,6 +2,25 @@ page-collection {
     ion-grid {
         padding: 0px !important;
     }
+    ion-item-options .checkbox-icon {
+        position: absolute;
+        top: 30%;
+    }
+    ion-footer ion-toolbar button {
+        width: 100%;
+    }
+    ion-footer ion-toolbar ion-select {
+        z-index: 1000;
+        position: absolute;
+        max-width: 100%;
+        width: 100%;
+    }
+    ion-select .select-text {
+        visibility: hidden;
+    }
+    ion-select .select-icon {
+        visibility: hidden;
+    }
     .col-reading {
         padding: 0px !important;
         padding-bottom: 15px !important;     
@@ -51,4 +70,63 @@ page-collection {
         color: white;
         font-size: 3em;
     }
+    .edit-icon {
+        font-size: 1.4rem;
+    }
+    .edit-label {
+        position: absolute;
+        padding-left: 5px;
+        color: darkgray;
+    }
+
+    // CIRCLE
+    .badge-circle {
+        background-color: white;
+        margin-top: -10px !important;
+    }
+    .main {
+        position: relative;
+        width: 20px;
+        height: 20px;
+      }
+      .quarter {
+        position: absolute;
+        width: 50%;
+        height: 50%;
+        transition: background-color 0.2s ease-in-out;
+      }
+      .quarter1 {
+        top: 0;
+        left: 0;
+        // background-color: #488aff;
+        border-radius: 100% 0 0 0;
+      }
+      .quarter2 {
+        top: 0;
+        right: 0;
+        background-color: #488aff;
+        border-radius: 0 100% 0 0;
+      }
+      .quarter3 {
+        bottom: 0;
+        left: 0;
+        background-color: #32db64;
+        border-radius: 0 0 0 100%;
+      }
+      .quarter4 {
+        bottom: 0;
+        right: 0;
+        background-color: #32db64;
+        border-radius: 0 0 100% 0;
+      }
+      .cutout {
+        width: 50%;
+        height: 50%;
+        background-color: white;
+        position: absolute;
+        top: 25%;
+        left: 25%;
+        border-radius: 50%;
+        pointer-events: none;
+      }
 }

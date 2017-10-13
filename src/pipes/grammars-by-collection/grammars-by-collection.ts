@@ -10,7 +10,10 @@ export class GrammarsByCollectionPipe implements PipeTransform {
     public afDB: AngularFireDatabase,
     public afAuth: AngularFireAuth) {}
 
-  transform(value, search: string, type: string, studentKey: string) {
+  transform(value, search: string, collectionKey: string, segment: string, trainings: string[]) {
+    if (!trainings)
+      trainings = ['constructor', 'insertion'];
+
     let grammars = [];
 
     if (search)
@@ -19,17 +22,43 @@ export class GrammarsByCollectionPipe implements PipeTransform {
     if (value == null)
       return;
 
-    if (value && type) { 
+    if (value && collectionKey) { 
       for (let grammarKey of value) {
         let ref = this.afDB.object(`/grammars/${grammarKey.$key}`);
         ref.subscribe(grammar => {
-          let key = studentKey ? studentKey : this.afAuth.auth.currentUser['enemail'];
+          if (trainings)
+            for (let training of trainings)
+              this.afDB.object(`/grammarLearned/${this.afAuth.auth.currentUser['enemail']}/grammar/collections/${collectionKey}/${training}/${grammarKey.$key}`)
+                .subscribe(isLearned => {
+                  switch (training) {
+                    case 'constructor':
+                      grammar['constructorLearned'] = isLearned.$value;
+                    break;
+                    case 'insertion':
+                      grammar['insertionLearned'] = isLearned.$value;
+                    break;
+                  }
 
-          this.afDB.object(`/students/${key}/collections/${type}/${grammarKey.key}`)
-            .subscribe(isLearned => {
-              grammar['isLearned'] = isLearned.$exists();
-              grammars.push(grammar);
-            })
+                  if (grammars.filter(g => g.$key == grammar.$key).length == 0) {
+                    // PUSH IF NOT LEARNED FOR TRAINING
+                    if (segment == 'training')
+                      switch (training) {
+                        case 'constructor' :
+                          if (!grammar.constructorLearned)
+                            grammars.push(grammar);
+                        break;
+                        case 'insertion' :
+                          if (!grammar.insertionLearned)
+                            grammars.push(grammar);
+                        break;
+                      }
+
+                    // PUSH IF NOT TRAINING
+                    if (segment == 'content')
+                      grammars.push(grammar);
+                  }
+                });
+                
         });
         ref.$ref.on('child_removed', child => {
           let index = grammars.findIndex(obj => obj.$key == child.ref.parent.key);

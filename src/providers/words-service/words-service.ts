@@ -13,7 +13,7 @@ export class WordsServiceProvider {
   constructor(public http: Http) {
     this.mashape = 'TtUzsrsEaUmshbfK6VBMls3d7lrdp1zDWOOjsnF36LZus21vvh';
     this.url = 'https://wordsapiv1.p.mashape.com/words/';
-    this.conjuctionURL = 'http://192.241.243.213:5000/api/conjuction/';
+    this.conjuctionURL = 'http://192.241.243.213/api/conjuction/';
     this.headers = new Headers();
     this.headers.append('Accept', 'application/json');
     this.headers.append('X-Mashape-Key', this.mashape);

@@ -43,6 +43,7 @@ import { ParseDatePipe } from "../pipes/parse-date/parse-date";
 import { VideosByCollectionPipe } from "../pipes/videos-by-collection/videos-by-collection";
 import { GrammarsByCollectionPipe } from "../pipes/grammars-by-collection/grammars-by-collection";
 import { SafeHtmlDirective } from "../directives/safe-html/safe-html";
+import { GrammarValueDirective } from "../directives/grammar-value/grammar-value";
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -97,7 +98,8 @@ export const firebaseConfig = {
     ReadingText,
     ReadingImage,
     ReadingQuote,
-    SafeHtmlDirective
+    SafeHtmlDirective,
+    GrammarValueDirective
   ],
   imports: [
     BrowserModule,

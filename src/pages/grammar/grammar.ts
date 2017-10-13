@@ -21,6 +21,7 @@ export class GrammarPage {
   options: string[];
   result: string = '';
   index: number = 0;
+  isLastGrammar: boolean;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -38,7 +39,7 @@ export class GrammarPage {
       else
         this.afDB.list(`grammarCollections/${this.collectionKey}`)
         .subscribe(grammars => {
-          this.grammars = this.grammarByCollectionPipe.transform(grammars, undefined, this.collectionKey, undefined);
+          this.grammars = this.grammarByCollectionPipe.transform(grammars, undefined, this.collectionKey, 'training', [this.type]);
         });
         
         let grammarInterval = setInterval(() => {
@@ -56,7 +57,6 @@ export class GrammarPage {
     
     // LAST WORD IN GRAMMAR
     if (this.words.length == this.index) {
-
       return;
     }
       
@@ -71,10 +71,22 @@ export class GrammarPage {
   }
   
   onNextClick() {
-    this.grammarIndex++;
-    
-    if (this.grammars.length == this.grammarIndex)
-      return;
+    if (this.equateAnswer()) {
+      if (this.grammars.length - 1 == this.grammarIndex) {
+        this.isLastGrammar = true;
+      }
+
+      this.afDB.database.ref(`/grammarLearned/${this.afAuth.auth.currentUser['enemail']}/grammar/collections/${this.collectionKey}/${this.type}/${this.grammars[this.grammarIndex].$key}`).set(true);
+      this.grammarIndex++;
+      this.index = 0;
+      this.result = '';
+      this.words = this.grammars[this.grammarIndex].sentence.split(' ');
+      this.getOptions();  
+    }
+  }
+
+  onReturnButton() {
+
   }
 
   getOptions() {
@@ -88,5 +100,11 @@ export class GrammarPage {
             this.options = this.words;
         });
     }
+  }
+
+  equateAnswer(): boolean {
+    let result = this.result.toLowerCase().replace(/ /g, '');
+    let sentence = this.grammars[this.grammarIndex].sentence.toLowerCase().replace(/ /g, '');
+    return result == sentence;
   }
 }

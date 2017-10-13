@@ -25,8 +25,12 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <button *ngIf="type == 'trainings'" ion-button round outline
+    <button *ngIf="type == 'constructor' ||
+                   type == 'insertion' ||
+                   !isLastGrammar" ion-button round outline
       [disabled]="this.words?.length != this.index"
       (click)="onNextClick()">Next</button>
+    <button *ngIf="isLastGrammar" ion-button round outline
+      (click)="onReturnButton()">Return</button>
   </ion-list>
 </ion-content>
