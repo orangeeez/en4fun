@@ -16,4 +16,11 @@ page-grammar {
         font-weight: bold !important;
         font-size: 1.4rem !important;
     }
+    .result-word {
+        font-weight: 200;
+    }
+    .incorrect-word {
+        text-decoration: line-through;
+        text-decoration-color: #f53d3d;
+    }
 }

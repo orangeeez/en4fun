@@ -23,18 +23,19 @@ export class CollectionPage {
   type: string;
   studentKey: any;
   collection: any;
-  words: any[];
+  words: FirebaseListObservable<any[]>;
   readings: any[];
   videos: FirebaseListObservable<any[]>;
   grammars: FirebaseListObservable<any[]>;
-  checkedGrammarKeys: string[];
+  checkedKeys: string[];
   grammarsCount: number;
-  isCountLabelEnabled: boolean;
+  wordsCount: number;
   text: string[];
   segment: string = 'trainings';
   trainings: any;
-  isEditChecked: boolean;
   selectedTrainingKeys: string[];
+  isCountLabelEnabled: boolean;
+  isEditChecked: boolean;
 
   constructor(
     public platfrom: Platform,
@@ -47,7 +48,6 @@ export class CollectionPage {
     public youtubePlayer: YoutubeVideoPlayer,
     public toastCtrl: ToastController) {
       this.readings = [];
-      this.words = [];
       this.user = this.afAuth.auth.currentUser;
       this.type = this.navParams.get('type');
       this.studentKey = this.navParams.get('studentKey');
@@ -55,15 +55,24 @@ export class CollectionPage {
 
       switch (this.type) {
         case 'vocabulary' :
-          this.afDB.object(`wordCollections/${this.collection.$key}`)
-            .subscribe(wordCollection => {
-              this.words = [];
-              if (wordCollection.$exists())
-                for (let wordKey in wordCollection)
-                  this.afDB.object(`words/${wordKey}`)
-                    .subscribe(word => {
-                      this.words.push(word);
-                    });
+          this.checkedKeys = [];   
+          this.words = this.afDB.list(`/wordCollections/${this.collection.$key}`);          
+          this.trainings = [{ name: 'Word - translation', imageURL: 'assets/images/translator.png', type: 'wordtranslation', left: 0 },
+                            { name: 'Translation - word', imageURL: 'assets/images/translator-reverse.png', type: 'translationword', left: 0 },
+                            { name: 'Word constructor', imageURL: 'assets/images/insertion.png', type: 'constructor', left: 0 }];
+
+          // GET ALL GRAMMAR IN CERTAIN COLLECTION
+          this.afDB.database.ref(`/wordCollections/${this.collection.$key}`).once('value')
+            .then(wordKeys => {
+              this.wordsCount = Object.keys(wordKeys.val()).length;
+
+              // COUNT LEFT SENTENCES FOR EACH TRAINING  
+              for (let training of this.trainings)
+              this.afDB.list(`/wordLearned/${this.user['enemail']}/vocabulary/collections/${this.collection.$key}/${training.type}`)
+                .subscribe(wordKeys => {
+                  let learned = wordKeys.map(key => key.$value).filter(value => value == true);
+                  training.left = this.wordsCount - learned.length;
+                });
             });
         break;
         case 'reading' :
@@ -83,7 +92,7 @@ export class CollectionPage {
           this.videos = this.afDB.list(`videoCollections/${this.collection.$key}`);
         break;
         case 'grammar' :
-          this.checkedGrammarKeys = [];
+          this.checkedKeys = [];
           this.grammars = this.afDB.list(`/grammarCollections/${this.collection.$key}`);
           this.trainings = [{ name: 'sentence constructor', imageURL: 'assets/images/constructor.png', type: 'constructor', left: 0 },
                             { name: 'sentence insertion', imageURL: 'assets/images/insertion.png', type: 'insertion', left: 0 }];
@@ -114,12 +123,13 @@ export class CollectionPage {
   onWordClick(word) {
     this.navCtrl.push(WordPage, {
       word: word,
-      words: this.words
+      words: this.words,
+      collectionKey: this.collection.$key
     });
   }
 
   onRemoveWordClick(word: any) {
-    this.words = [];
+    // this.words = [];
     this.afDB.database.ref(`/wordCollections/other`).child(word.$key).set(true);
     this.afDB.database.ref(`/wordCollections/${this.collection.$key}/${word.$key}`).remove();
     this.afDB.database.ref(`/wordKeys/${word.$key}`).set({ used: false });
@@ -194,19 +204,19 @@ export class CollectionPage {
     })
   }
 
-  onGrammarCheckClick(grammar, checked) {
+  onInstanceCheckClick(instance, checked) {
     if (checked) {
-      grammar.checked = checked;
-      this.checkedGrammarKeys.push(grammar.$key);
+      instance.checked = checked;
+      this.checkedKeys.push(instance.$key);
     }
     else {
-      grammar.checked = checked;      
-      this.checkedGrammarKeys = this.checkedGrammarKeys.filter(key => key !== grammar.$key);
+      instance.checked = checked;      
+      this.checkedKeys = this.checkedKeys.filter(key => key !== instance.$key);
     }
   }
 
   onEditCheckboxClick() {
-    this.checkedGrammarKeys = [];
+    this.checkedKeys = [];
     this.isEditChecked = true;
     for (let slide of this.slidings.toArray()) {
       slide.setElementClass("active-sliding", true);
@@ -233,11 +243,11 @@ export class CollectionPage {
 
   onSelectOkClick() {
     for (let trainingKey of this.selectedTrainingKeys)
-    for (let grammarKey of this.checkedGrammarKeys)
+    for (let grammarKey of this.checkedKeys)
     this.afDB.database.ref(`/grammarLearned/${this.user['enemail']}/grammar/collections/${this.collection.$key}/${trainingKey}/${grammarKey}`).set(false);
     
     this.selectedTrainingKeys.length = 0;
-    this.checkedGrammarKeys.length = 0;
+    this.checkedKeys.length = 0;
     this.onCloseCheckboxClick();
   }
 
@@ -245,18 +255,50 @@ export class CollectionPage {
     for (let slide of this.slidings.toArray())
       if (checked) {
         // IF GRAMMAR KEYS CONTAIN NEW CHECKED GRAMMARS
-        if (this.checkedGrammarKeys.filter(key => key == slide._elementRef.nativeElement.value.$key).length == 0) {
-          this.checkedGrammarKeys.push(slide._elementRef.nativeElement.value.$key);
+        if (this.checkedKeys.filter(key => key == slide._elementRef.nativeElement.value.$key).length == 0) {
+          this.checkedKeys.push(slide._elementRef.nativeElement.value.$key);
           slide._elementRef.nativeElement.value['checked'] = true;
         }
       }
       else {
-        this.checkedGrammarKeys = this.checkedGrammarKeys.filter(key => key !== slide._elementRef.nativeElement.value.$key);        
+        this.checkedKeys = this.checkedKeys.filter(key => key !== slide._elementRef.nativeElement.value.$key);        
         slide._elementRef.nativeElement.value['checked'] = false;
       }
   }
 
-  onGetQuarterColor(grammar, num: number) {
+  onGetWordQuarterColor(word, num: number) {
+    switch (this.trainings.length) {
+      case 1: 
+      break;
+      case 2:
+      break;
+      case 3:
+        if (num == 1) {
+          if (word.constructorLearned) 
+            return '#488aff';
+          else 
+            return '#f4f4f4';
+        }
+
+        else if (num == 2) {
+          if (word.wordtranslationLearned) 
+            return '#32db64';
+          else 
+            return '#f4f4f4';
+        }
+
+        else if (num == 3 || 
+                 num == 4) {
+          if (word.translationwordLearned) 
+            return '#f53d3d';
+          else 
+            return '#f4f4f4';
+        }
+      break;
+    }
+  }
+
+  onGetGrammarQuarterColor(grammar, num: number) {
     switch (this.trainings.length) {
       case 1: 
         if (num == 1 ||
@@ -333,10 +375,11 @@ export class CollectionPage {
 
               case 'vocabulary' :
                 // Unused words used in collection
-                for (let word of this.words) {
-                  this.afDB.database.ref(`/wordCollections/${this.collection.$key}`).remove();
-                  this.afDB.database.ref(`/wordKeys/${word.$key}`).update({ used: false });
-                }
+                this.afDB.database.ref(`/wordCollections/${this.collection.$key}`).remove();
+                this.words.forEach(words => {
+                  for (let word of words)
+                    this.afDB.database.ref(`/wordKeys/${word.$key}`).update({ used: false });
+                });
               break;
 
               case 'video' :

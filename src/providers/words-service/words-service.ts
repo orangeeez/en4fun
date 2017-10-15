@@ -28,8 +28,8 @@ export class WordsServiceProvider {
     return GoogleTranslator('en', 'ru', word, callback);
   }
 
-  getConjuction(word: string) {
-    return this.http.get(this.conjuctionURL + word)
+  getConjuction(word: string, method: string) {
+    return this.http.get(this.conjuctionURL + `${method}/` + word)
       .map(words => words.json());
   }
 }

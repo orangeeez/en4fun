@@ -22,7 +22,8 @@
 
 
 <ion-content padding>
-  <ion-segment *ngIf="type == 'grammar'" [(ngModel)]="segment" style="padding-bottom: 10px">
+  <ion-segment *ngIf="type == 'grammar' ||
+                      type == 'vocabulary'" [(ngModel)]="segment" style="padding-bottom: 10px">
     <ion-segment-button value="trainings">
       Trainings
     </ion-segment-button>
@@ -30,6 +31,8 @@
       Content
     </ion-segment-button>
   </ion-segment>
+  <ion-checkbox #checkbox *ngIf="isEditChecked" (click)="onEditCheckAllClick(checkbox.checked)"></ion-checkbox>
+  <span *ngIf="isEditChecked" class="edit-label">{{ checkedKeys.length }}</span>
   <!-- READING -->
   <ion-grid *ngIf="type == 'reading'">
     <ion-card  *ngFor="let reading of readings">
@@ -45,8 +48,9 @@
   </ion-grid>
 
   <!-- VOCABULARY -->
-  <ion-list *ngIf="type == 'vocabulary'">
-    <ion-item-sliding *ngFor="let word of words">
+  <ion-list *ngIf="type == 'vocabulary' && segment == 'content'">
+    <ion-item-sliding #slidings *ngFor="let word of words | async | wordsByCollection: undefined: collection.$key: 'content'"
+                      [instanceValue]="word">
       <ion-item (click)="onWordClick(word)">
         <ion-thumbnail item-start>
           <img [src]="word.imageURL">
@@ -56,7 +60,20 @@
           <i *ngFor="let translation of word.translations; let i = index">
             {{ translation }}<i *ngIf="word.translations.length - 1 != i">,</i>
           </i>
-        </p>   
+        </p>
+        <ion-badge item-end class="badge-circle">
+          <div class="main">
+            <div class="quarter quarter1"
+                [style.background-color]="onGetWordQuarterColor(word, 1)"></div>
+            <div class="quarter quarter2"
+                [style.background-color]="onGetWordQuarterColor(word, 2)"></div>
+            <div class="quarter quarter3"
+                [style.background-color]="onGetWordQuarterColor(word, 3)"></div>
+            <div class="quarter quarter4"
+                [style.background-color]="onGetWordQuarterColor(word, 4)"></div>
+            <div class="cutout"></div>
+          </div>
+        </ion-badge>
       </ion-item>
       <ion-item-options *ngIf="!studentKey" side="right">
         <button ion-button color="light"
@@ -64,6 +81,10 @@
           <ion-icon name="md-trash"></ion-icon>
           Remove
         </button>
+      </ion-item-options>
+      <ion-item-options side="left">
+        <ion-checkbox #wordCheckbox [(ngModel)]="word.checked"
+                      (click)="onInstanceCheckClick(word, wordCheckbox.checked)"></ion-checkbox>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
@@ -87,24 +108,21 @@
 
   <!-- GRAMMAR -->
   <ion-list *ngIf="type == 'grammar' && segment == 'content'">
-    <ion-checkbox #checkbox *ngIf="isEditChecked" (click)="onEditCheckAllClick(checkbox.checked)"></ion-checkbox>
-    <span *ngIf="isEditChecked" class="edit-label">{{ checkedGrammarKeys.length }}</span>
     <ion-item-sliding #slidings *ngFor="let grammar of grammars | async | grammarsByCollection: undefined: collection.$key: 'content'"
-      [grammarValue]="grammar">
-      <ion-item
-        (click)="onGrammarClick(grammar)">
+                      [instanceValue]="grammar">
+      <ion-item>
         <h2 *ngIf="grammar.translation">{{ grammar.translation | capitalize }}</h2>
-        <p *ngIf="grammar.sentence"> {{ grammar.isLearned ? grammar.sentence : '&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;' }}</p>
+        <p *ngIf="grammar.sentence">&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</p>
         <ion-badge item-end class="badge-circle">
           <div class="main">
             <div class="quarter quarter1"
-                 [style.background-color]="onGetQuarterColor(grammar, 1)"></div>
+                [style.background-color]="onGetGrammarQuarterColor(grammar, 1)"></div>
             <div class="quarter quarter2"
-                 [style.background-color]="onGetQuarterColor(grammar, 2)"></div>
+                [style.background-color]="onGetGrammarQuarterColor(grammar, 2)"></div>
             <div class="quarter quarter3"
-                 [style.background-color]="onGetQuarterColor(grammar, 3)"></div>
+                [style.background-color]="onGetGrammarQuarterColor(grammar, 3)"></div>
             <div class="quarter quarter4"
-                 [style.background-color]="onGetQuarterColor(grammar, 4)"></div>
+                [style.background-color]="onGetGrammarQuarterColor(grammar, 4)"></div>
             <div class="cutout"></div>
           </div>
         </ion-badge>
@@ -113,16 +131,17 @@
         <button ion-button color="light"
           (click)="onRemoveGrammarClick(collection.$key, grammar, studentKey)">
         <ion-icon name="md-trash"></ion-icon>
-        Remove
+          Remove
         </button>
       </ion-item-options>
       <ion-item-options side="left">
         <ion-checkbox #grammarCheckbox [(ngModel)]="grammar.checked"
-                      (click)="onGrammarCheckClick(grammar, grammarCheckbox.checked)"></ion-checkbox>
+                      (click)="onInstanceCheckClick(grammar, grammarCheckbox.checked)"></ion-checkbox>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-  <ion-card *ngIf="type == 'grammar' && segment == 'trainings'">
+  <ion-card *ngIf="(type == 'grammar' ||
+                    type == 'vocabulary') && segment == 'trainings'">
     <ion-grid>
       <ion-row>
         <ion-col *ngFor="let training of trainings" class="col-grammar"
@@ -136,15 +155,15 @@
     </ion-grid>
   </ion-card>
 </ion-content>
-<ion-footer *ngIf="segment == 'content' && (isEditChecked || checkedGrammarKeys.length > 0)">
+<ion-footer *ngIf="segment == 'content' && (isEditChecked || checkedKeys.length > 0)">
   <ion-toolbar color="primary">
       <ion-buttons>
-        <ion-select *ngIf="checkedGrammarKeys?.length > 0" [(ngModel)]="selectedTrainingKeys" multiple
+        <ion-select *ngIf="checkedKeys?.length > 0" [(ngModel)]="selectedTrainingKeys" multiple
                     (ionChange)="onSelectOkClick()">
           <ion-option *ngFor="let training of trainings" 
             [value]="training.type">{{ training.name | capitalize }}</ion-option>
         </ion-select>
-        <button [disabled]="checkedGrammarKeys?.length == 0" ion-button>Send to the Training...</button>
+        <button [disabled]="checkedKeys?.length == 0" ion-button>Send to the Training...</button>
       </ion-buttons>
   </ion-toolbar>
 </ion-footer>

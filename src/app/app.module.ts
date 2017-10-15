@@ -142,6 +142,7 @@ export const firebaseConfig = {
     WordsServiceProvider,
     SpaceCapitalLettersPipe,
     GrammarsByCollectionPipe,
+    WordsByCollectionPipe,
     TitleCasePipe,
     YoutubeVideoPlayer
   ]

@@ -10,11 +10,11 @@ export class GrammarsByCollectionPipe implements PipeTransform {
     public afDB: AngularFireDatabase,
     public afAuth: AngularFireAuth) {}
 
-  transform(value, search: string, collectionKey: string, segment: string, trainings: string[]) {
+    transform(value, search: string, collectionKey: string, segment: string, trainings: string[]) {
+    let grammars = [];
+
     if (!trainings)
       trainings = ['constructor', 'insertion'];
-
-    let grammars = [];
 
     if (search)
       search = search.toLowerCase();
@@ -88,6 +88,6 @@ export class GrammarsByCollectionPipe implements PipeTransform {
       }
    }
       
-    return grammars;
+  return grammars;
   }
 }

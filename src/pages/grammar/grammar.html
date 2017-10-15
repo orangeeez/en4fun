@@ -1,17 +1,18 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Grammar</ion-title>
+    <ion-title>{{ type | capitalize }}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-list class="center">
+  <ion-list *ngIf="type == 'constructor'" class="center">
     <ion-item text-wrap class="translation">
       <h1>{{ grammars[grammarIndex]?.translation }}</h1>
     </ion-item>
     <ion-item text-wrap class="sentence">
-      <h3>{{ grammars[grammarIndex]?.isLearned ? grammars[grammarIndex]?.sentence : result }}</h3>
-      <button *ngIf="!grammars[grammarIndex]?.isLearned" ion-button clear icon-left class="backspace-button"
+      <h3><span *ngFor="let word of result; let i = index" class="result-word"
+                [ngClass]="isCheckSentence && isWordIncorrect(i) ? 'incorrect-word' : ''">{{ word | uppercase }} </span></h3>
+      <button *ngIf="!isCheckSentence" ion-button clear icon-left class="backspace-button"
         [disabled]="index == 0"
         (click)="onBackspaceClick()">
         <ion-icon name="backspace"></ion-icon>
@@ -25,12 +26,13 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <button *ngIf="type == 'constructor' ||
-                   type == 'insertion' ||
-                   !isLastGrammar" ion-button round outline
+    <button *ngIf="!isLastGrammar &&
+                   !isCheckSentence" ion-button round outline
       [disabled]="this.words?.length != this.index"
       (click)="onNextClick()">Next</button>
+    <button *ngIf="isCheckSentence" ion-button round outline
+      (click)="onRepeatClick()">Try again</button>
     <button *ngIf="isLastGrammar" ion-button round outline
-      (click)="onReturnButton()">Return</button>
+      (click)="onReturnClick()">Return</button>
   </ion-list>
 </ion-content>

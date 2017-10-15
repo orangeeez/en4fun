@@ -1,14 +1,14 @@
 import { Directive, Input, ElementRef, OnChanges } from '@angular/core';
 
 @Directive({
-  selector: '[grammarValue]',
-  exportAs: 'grammarValue'  
+  selector: '[instanceValue]',
+  exportAs: 'instanceValue'  
 })
 export class GrammarValueDirective implements OnChanges{
-    @Input() grammarValue: any;
+    @Input() instanceValue: any;
     constructor(private elementRef: ElementRef) {}
 
     ngOnChanges(): any {
-      this.elementRef.nativeElement.value = this.grammarValue;
+      this.elementRef.nativeElement.value = this.instanceValue;
     }
 }

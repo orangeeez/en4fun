@@ -19,9 +19,11 @@ export class GrammarPage {
   collectionKey: string;
   words: string[];
   options: string[];
-  result: string = '';
+  result: string[] = [];
   index: number = 0;
+  isCheckSentence: boolean;
   isLastGrammar: boolean;
+  incorrectWords: number[] = [];
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -38,9 +40,9 @@ export class GrammarPage {
       }
       else
         this.afDB.list(`grammarCollections/${this.collectionKey}`)
-        .subscribe(grammars => {
-          this.grammars = this.grammarByCollectionPipe.transform(grammars, undefined, this.collectionKey, 'training', [this.type]);
-        });
+          .subscribe(grammars => {
+            this.grammars = this.grammarByCollectionPipe.transform(grammars, undefined, this.collectionKey, 'training', [this.type]);
+          });
         
         let grammarInterval = setInterval(() => {
           if (this.grammars.length > 0) {
@@ -52,7 +54,7 @@ export class GrammarPage {
   }
 
   onOptionClick(option: string, i: number) {
-    this.result += ' ' + this.options[i].toUpperCase();
+    this.result.push(this.options[i].toLowerCase());
     this.index++;
     
     // LAST WORD IN GRAMMAR
@@ -66,33 +68,47 @@ export class GrammarPage {
   onBackspaceClick() {
     this.index--;
     this.getOptions();
-    var lastIndex = this.result.lastIndexOf(" ");
-    this.result = this.result.substring(0, lastIndex);
+    this.result.pop();
+    // var lastIndex = this.result.lastIndexOf(" ");
+    // this.result = this.result.substring(0, lastIndex);
   }
   
   onNextClick() {
+    this.incorrectWords.length = 0;
     if (this.equateAnswer()) {
       if (this.grammars.length - 1 == this.grammarIndex) {
         this.isLastGrammar = true;
+        return;
       }
 
       this.afDB.database.ref(`/grammarLearned/${this.afAuth.auth.currentUser['enemail']}/grammar/collections/${this.collectionKey}/${this.type}/${this.grammars[this.grammarIndex].$key}`).set(true);
       this.grammarIndex++;
       this.index = 0;
-      this.result = '';
+      this.result.length = 0;
       this.words = this.grammars[this.grammarIndex].sentence.split(' ');
       this.getOptions();  
     }
+    else {
+      this.isCheckSentence = true;
+    }
   }
 
-  onReturnButton() {
+  onReturnClick() {
 
+  }
+
+  onRepeatClick() {
+    this.isCheckSentence = false;
+    this.index = 0;
+    this.result.length = 0;
+    this.words = this.grammars[this.grammarIndex].sentence.split(' ');
+    this.getOptions();
   }
 
   getOptions() {
     this.options = Lingua.checkForPronounsAndVerbs(this.words[this.index]);
     if (!this.options) {
-      this.wordsService.getConjuction(this.words[this.index])
+      this.wordsService.getConjuction(this.words[this.index], 'getword')
         .subscribe(words => {
           if (words)
             this.options = words;
@@ -103,8 +119,15 @@ export class GrammarPage {
   }
 
   equateAnswer(): boolean {
-    let result = this.result.toLowerCase().replace(/ /g, '');
-    let sentence = this.grammars[this.grammarIndex].sentence.toLowerCase().replace(/ /g, '');
-    return result == sentence;
+    let sentence = this.grammars[this.grammarIndex].sentence.toLowerCase().split(" ");
+    for (let i = 0; i < this.result.length; i++)
+      if (this.result[i] != sentence[i])
+        this.incorrectWords.push(i);
+
+    return this.result.every((v,i)=> v === sentence[i]);
+  }
+
+  isWordIncorrect(index) {
+    return this.incorrectWords.filter(w => w == index).length > 0
   }
 }
