@@ -1,0 +1,52 @@
+page-word-training {
+    img {
+        width: 40%;
+    }
+    .translation {
+        text-align: center;
+    }
+    .sentence {
+        text-align: center;
+    }
+    .backspace-button {
+        font-size: 2rem !important;
+    }
+    .column {
+        text-align: center;
+        font-size: 1.8rem;
+    }
+    .column .button-ios {
+        font-weight: bold !important;
+        font-size: 1.4rem !important;
+    }
+    .column .button-md {
+        font-weight: bold !important;
+        font-size: 1.4rem !important;
+    }
+    .result-word {
+        font-weight: 200;
+    }
+    .incorrect-word {
+        text-decoration: line-through;
+        text-decoration-color: #f53d3d;
+    }
+    .correct-word {
+        color: #32db64;
+    }
+    .last-word-success {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 90%;
+        flex-direction: column;
+    }
+    .last-word-success-icon {
+        color: #32db64;
+        font-size: 7rem;
+    }
+    .last-word-text {
+        font-weight: lighter;
+        font-size: 2rem;
+        margin: 10px;
+    }
+}

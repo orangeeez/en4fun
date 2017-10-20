@@ -81,7 +81,7 @@ export class GrammarPage {
         return;
       }
 
-      this.afDB.database.ref(`/grammarLearned/${this.afAuth.auth.currentUser['enemail']}/grammar/collections/${this.collectionKey}/${this.type}/${this.grammars[this.grammarIndex].$key}`).set(true);
+      this.afDB.database.ref(`/learned/${this.afAuth.auth.currentUser['enemail']}/grammar/collections/${this.collectionKey}/${this.type}/${this.grammars[this.grammarIndex].$key}`).set(true);
       this.grammarIndex++;
       this.index = 0;
       this.result.length = 0;

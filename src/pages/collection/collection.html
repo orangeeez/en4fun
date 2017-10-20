@@ -33,6 +33,7 @@
   </ion-segment>
   <ion-checkbox #checkbox *ngIf="isEditChecked" (click)="onEditCheckAllClick(checkbox.checked)"></ion-checkbox>
   <span *ngIf="isEditChecked" class="edit-label">{{ checkedKeys.length }}</span>
+  
   <!-- READING -->
   <ion-grid *ngIf="type == 'reading'">
     <ion-card  *ngFor="let reading of readings">
@@ -146,7 +147,7 @@
       <ion-row>
         <ion-col *ngFor="let training of trainings" class="col-grammar"
           col-6 col-lg-4 col-xl-3 
-          (click)="onTrainingClick(training)">
+          (click)="onTrainingClick(training, type)">
             <img [src]="training.imageURL">
             <h2>{{ training.name | capitalize }}</h2>
             <p>{{ training.left }} sentences more</p>

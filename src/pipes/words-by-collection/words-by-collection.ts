@@ -28,7 +28,7 @@ export class WordsByCollectionPipe implements PipeTransform {
         ref.subscribe(word => {
           if (trainings)
             for (let training of trainings)
-              this.afDB.object(`/wordLearned/${this.afAuth.auth.currentUser['enemail']}/vocabulary/collections/${collectionKey}/${training}/${wordKey.$key}`)
+              this.afDB.object(`/learned/${this.afAuth.auth.currentUser['enemail']}/vocabulary/collections/${collectionKey}/${training}/${wordKey.$key}`)
                 .subscribe(isLearned => {
                   switch (training) {
                     case 'constructor':
@@ -58,7 +58,7 @@ export class WordsByCollectionPipe implements PipeTransform {
                           if (!word.translationwordLearned)
                             words.push(word);
                           break;
-                      }
+                        }
 
                     // PUSH IF NOT TRAINING
                     if (segment == 'content')

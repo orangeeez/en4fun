@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ training.name }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="isLastWord" class="last-word-success">
+    <ion-icon name="checkmark-circle" class="last-word-success-icon"></ion-icon>
+    <span class="last-word-text">Congratulations</span>
+    <button ion-button round outline
+      (click)="onReturnClick()">Return</button>
+  </div>
+  <ion-list class="center">
+    <ng-container *ngIf="!isLastWord">
+      <ion-item text-wrap class="translation">
+        <img [src]="words[wordIndex]?.imageURL">
+        <h1 *ngIf="isWordTranslationSelected">{{ words[wordIndex]?.$key | capitalize }}</h1>
+        <h1 *ngIf="isTranslationWordSelected ||
+                  isConstructorSelected">{{ words[wordIndex]?.translations[randomTranslationIndex] | capitalize }}</h1>
+      </ion-item>
+      <ion-item text-wrap class="sentence">
+        <h3 *ngIf="training.type != 'constructor'" 
+            [ngClass]="isCheckWord && isWordIncorrect() ? 'incorrect-word' : ''">{{ result | uppercase }}
+        </h3>
+        <h3 *ngIf="training.type == 'constructor'">
+          <span *ngFor="let letter of result;" class="result-word"
+                [ngClass]="isCheckWord && isWordIncorrect() ? 'incorrect-word' : ''">{{ letter | uppercase }} 
+          </span>
+        </h3>
+        <h5 *ngIf="isCheckWord && isWordIncorrect()" class="correct-word">{{ words[wordIndex].$key | uppercase }}</h5>
+        <button *ngIf="!isCheckWord && training.type =='constructor'" ion-button clear icon-left class="backspace-button"
+          [disabled]="!result || result?.length == 0"
+          (click)="onBackspaceClick()">
+          <ion-icon name="backspace"></ion-icon>
+        </button>
+      </ion-item>
+      <ion-grid>
+        <ion-row *ngIf="(training.type == 'wordtranslation' ||
+                        training.type == 'translationword') &&
+                        !result">
+          <ion-col *ngFor="let option of options; let i = index" col-6 class="column">
+              <button ion-button full clear color="dark"
+                (click)="onOptionClick(option, i)">{{ option | uppercase }}</button>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="training.type == 'constructor'">
+          <ion-col *ngFor="let option of options; let i = index">
+              <button ion-button
+                (click)="onOptionClick(option)">{{ option | uppercase }}</button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+    <button *ngIf="result?.length > 0 && training.type != 'constructor' && !isCheckWord" ion-button round outline
+      (click)="onCancelClick()">Cancel</button>
+    <button *ngIf="!isLastWord &&
+                   !isCheckWord" ion-button round outline
+      [disabled]="!result || result?.length == 0"
+      (click)="onNextClick()">Next</button>
+    <button *ngIf="isCheckWord" ion-button round outline
+      (click)="onRepeatClick()">Try again</button>
+  </ion-list>
+</ion-content>

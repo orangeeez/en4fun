@@ -8,6 +8,7 @@ import { ReadingPage } from "../reading/reading";
 import { VideoPage } from "../video/video";
 import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player';
 import { GrammarPage } from "../grammar/grammar";
+import { WordTrainingPage } from "../word-training/word-training";
 import { ToastController } from 'ionic-angular';
 import * as firebase from 'firebase/app';
 
@@ -68,7 +69,7 @@ export class CollectionPage {
 
               // COUNT LEFT SENTENCES FOR EACH TRAINING  
               for (let training of this.trainings)
-              this.afDB.list(`/wordLearned/${this.user['enemail']}/vocabulary/collections/${this.collection.$key}/${training.type}`)
+              this.afDB.list(`/learned/${this.user['enemail']}/vocabulary/collections/${this.collection.$key}/${training.type}`)
                 .subscribe(wordKeys => {
                   let learned = wordKeys.map(key => key.$value).filter(value => value == true);
                   training.left = this.wordsCount - learned.length;
@@ -104,7 +105,7 @@ export class CollectionPage {
 
               // COUNT LEFT SENTENCES FOR EACH TRAINING  
               for (let training of this.trainings)
-              this.afDB.list(`/grammarLearned/${this.user['enemail']}/grammar/collections/${this.collection.$key}/${training.type}`)
+              this.afDB.list(`/learned/${this.user['enemail']}/grammar/collections/${this.collection.$key}/${training.type}`)
                 .subscribe(grammarKeys => {
                   let learned = grammarKeys.map(key => key.$value).filter(value => value == true);
                   training.left = this.grammarsCount - learned.length;
@@ -187,10 +188,10 @@ export class CollectionPage {
     });
   }
 
-  onTrainingClick(training) {
+  onTrainingClick(training, type) {
     if (training.left == 0) {
       let toast = this.toastCtrl.create({
-        message: 'Please add more sentences from content',
+        message: 'Please add material from content',
         duration: 3000
       });
       toast.present();
@@ -198,10 +199,20 @@ export class CollectionPage {
       return;
     }
 
-    this.navCtrl.push(GrammarPage, {
-      type: training.type,
-      collection: this.collection.$key
-    })
+    switch (type) {
+      case 'grammar':
+        this.navCtrl.push(GrammarPage, {
+          type: training.type,
+          collection: this.collection.$key
+        });
+      break;
+      case 'vocabulary': 
+        this.navCtrl.push(WordTrainingPage, {
+          training: training,
+          collection: this.collection.$key
+        });
+      break;
+    }
   }
 
   onInstanceCheckClick(instance, checked) {
@@ -243,12 +254,11 @@ export class CollectionPage {
 
   onSelectOkClick() {
     for (let trainingKey of this.selectedTrainingKeys)
-    for (let grammarKey of this.checkedKeys)
-    this.afDB.database.ref(`/grammarLearned/${this.user['enemail']}/grammar/collections/${this.collection.$key}/${trainingKey}/${grammarKey}`).set(false);
-    
-    this.selectedTrainingKeys.length = 0;
-    this.checkedKeys.length = 0;
-    this.onCloseCheckboxClick();
+      for (let checkedKey of this.checkedKeys)
+        this.afDB.database.ref(`/learned/${this.user['enemail']}/${this.type}/collections/${this.collection.$key}/${trainingKey}/${checkedKey}`).set(false);
+        this.selectedTrainingKeys.length = 0;
+        this.checkedKeys.length = 0;
+        this.onCloseCheckboxClick();
   }
 
   onEditCheckAllClick(checked) {

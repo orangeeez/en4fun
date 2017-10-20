@@ -28,7 +28,7 @@ export class GrammarsByCollectionPipe implements PipeTransform {
         ref.subscribe(grammar => {
           if (trainings)
             for (let training of trainings)
-              this.afDB.object(`/grammarLearned/${this.afAuth.auth.currentUser['enemail']}/grammar/collections/${collectionKey}/${training}/${grammarKey.$key}`)
+              this.afDB.object(`/learned/${this.afAuth.auth.currentUser['enemail']}/grammar/collections/${collectionKey}/${training}/${grammarKey.$key}`)
                 .subscribe(isLearned => {
                   switch (training) {
                     case 'constructor':

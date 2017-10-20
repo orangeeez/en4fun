@@ -28,7 +28,7 @@
     </ion-grid>
     <button *ngIf="!isLastGrammar &&
                    !isCheckSentence" ion-button round outline
-      [disabled]="this.words?.length != this.index"
+      [disabled]="words?.length != index"
       (click)="onNextClick()">Next</button>
     <button *ngIf="isCheckSentence" ion-button round outline
       (click)="onRepeatClick()">Try again</button>

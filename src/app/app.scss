@@ -1,3 +1,11 @@
+ion-popover .popover-wrapper {
+    width: 100% !important;
+}
+ion-popover .popover-wrapper .popover-content {
+    width: 100% !important;
+    position: initial !important;
+    overflow: unset;
+}
 ion-list .item-inner {
     border-bottom: none !important;
 }
