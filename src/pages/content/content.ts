@@ -23,7 +23,7 @@ export class ContentPage {
   readingCollections: FirebaseListObservable<any[]>;
   videoCollections: FirebaseListObservable<any[]>;
   grammarCollections: FirebaseListObservable<any[]>;  
-  collectionType: string = 'grammar';
+  collectionType: string = 'reading';
   words: any[] = [];
   search: string = ""
   collection: string = "";

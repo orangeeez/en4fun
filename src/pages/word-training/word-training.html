@@ -46,7 +46,7 @@
         </ion-row>
         <ion-row *ngIf="training.type == 'constructor'">
           <ion-col *ngFor="let option of options; let i = index">
-              <button ion-button
+              <button ion-button class="constructor-button"
                 (click)="onOptionClick(option)">{{ option | uppercase }}</button>
           </ion-col>
         </ion-row>

@@ -1,0 +1,32 @@
+.modal-add {
+    background-color: #f4f4f4;
+    text-align: center;
+    color: #488aff;
+}
+.answer-item {
+    padding-left: 50px;
+}
+.bar-buttons-md .back-icon {
+    padding: 0 5px !important;
+    margin: 0 6px !important;
+}
+.checkbox-answer-item {
+    z-index: 10;
+    margin: 0 !important;
+    position: absolute !important;
+    top: 15px;
+    left: 15px;
+}
+.list-answer-item {
+    margin-left: 10px !important;
+}
+.true-icon {
+    z-index: 10;
+    font-size: 1.5em;
+    color: #f4f4f4;
+}
+.false-icon {
+    z-index: 10;    
+    font-size: 1.5em;
+    color: #f4f4f4;    
+}

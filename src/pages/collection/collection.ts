@@ -25,7 +25,7 @@ export class CollectionPage {
   studentKey: any;
   collection: any;
   words: FirebaseListObservable<any[]>;
-  readings: any[];
+  readings: FirebaseListObservable<any[]>;
   videos: FirebaseListObservable<any[]>;
   grammars: FirebaseListObservable<any[]>;
   checkedKeys: string[];
@@ -48,7 +48,7 @@ export class CollectionPage {
     public alertCtrl: AlertController,
     public youtubePlayer: YoutubeVideoPlayer,
     public toastCtrl: ToastController) {
-      this.readings = [];
+      // this.readings = [];
       this.user = this.afAuth.auth.currentUser;
       this.type = this.navParams.get('type');
       this.studentKey = this.navParams.get('studentKey');
@@ -77,17 +77,7 @@ export class CollectionPage {
             });
         break;
         case 'reading' :
-          this.afDB.object(`readingCollections/${this.collection.$key}`)
-            .subscribe(readingCollection => {
-              this.readings = [];
-              if (readingCollection.$exists())
-                for (let readingKey in readingCollection) {
-                  this.afDB.object(`readings/${readingKey}`)
-                    .subscribe(reading => {
-                      this.readings.push(reading);
-                    });
-                  }
-           });
+            this.readings = this.afDB.list(`readingCollections/${this.collection.$key}`);
         break;
         case 'video' :
           this.videos = this.afDB.list(`videoCollections/${this.collection.$key}`);

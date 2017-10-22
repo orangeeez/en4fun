@@ -22,7 +22,7 @@ import { WordPage } from "../pages/word/word";
 import { TeachersPage } from "../pages/teachers/teachers";
 import { StudentsPage } from "../pages/students/students";
 import { ReadingPage } from "../pages/reading/reading";
-import { AddReadingPage, ReadingText, ReadingImage, ReadingQuote } from "../pages/add-reading/add-reading";
+import { AddReadingPage, ReadingText, ReadingImage, ReadingQuote, ReadingModal } from "../pages/add-reading/add-reading";
 import { AddVideoPage } from "../pages/add-video/add-video";
 import { VideoPage } from "../pages/video/video";
 import { AddGrammarPage } from "../pages/add-grammar/add-grammar";
@@ -100,6 +100,7 @@ export const firebaseConfig = {
     ReadingText,
     ReadingImage,
     ReadingQuote,
+    ReadingModal,
     SafeHtmlDirective,
     GrammarValueDirective
   ],
@@ -134,7 +135,8 @@ export const firebaseConfig = {
     WordTrainingPage,
     ReadingText,
     ReadingImage,
-    ReadingQuote
+    ReadingQuote,
+    ReadingModal
   ],
   providers: [
     StatusBar,

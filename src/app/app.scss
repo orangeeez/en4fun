@@ -3,8 +3,15 @@ ion-popover .popover-wrapper {
 }
 ion-popover .popover-wrapper .popover-content {
     width: 100% !important;
-    position: initial !important;
     overflow: unset;
+}
+.popover-md .popover-wrapper .popover-content {
+    top: 60px !important;
+    left: 0 !important;
+}
+.popover-ios .popover-wrapper .popover-content {
+    top: 67px !important;
+    left: 0 !important;
 }
 ion-list .item-inner {
     border-bottom: none !important;

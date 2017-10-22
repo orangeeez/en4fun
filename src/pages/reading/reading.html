@@ -12,6 +12,7 @@
       [innerHTML]="word | addSpaceCharacter"
       (tap)="onTapWord(spanWord)"></span> 
   </p>
+  <button (click)="onTrainingClick()"></button>
 </ion-content>
   
 <ion-footer *ngIf="translatedWords.length > 0" no-border>

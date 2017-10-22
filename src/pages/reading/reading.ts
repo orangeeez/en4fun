@@ -52,6 +52,8 @@ export class ReadingPage {
     }
   } 
 
+  onTrainingClick() {}
+
   translateCallback(translatedWords, word) {
     if (word.translations) 
       translatedWords.push.apply(translatedWords, word.translations[0].translations);

@@ -58,7 +58,7 @@ export class IntroducePage {
                 }
                 else {
                   user['type'] = 'student';
-                  this.navCtrl.setRoot(HomePage);
+                  this.navCtrl.setRoot(ContentPage);
                 }
               });
 
@@ -87,7 +87,7 @@ export class IntroducePage {
                 else
                   user['type'] = 'teacher';
 
-                this.navCtrl.setRoot(HomePage);
+                this.navCtrl.setRoot(ContentPage);
                 ref.$ref.off();
               });
           }

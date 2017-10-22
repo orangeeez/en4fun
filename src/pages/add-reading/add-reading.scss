@@ -1,6 +1,6 @@
 page-add-reading {
   ion-footer button {
-    width: 30%;
+    width: 23%;
   }
   .text {
     padding: 5px;
@@ -38,5 +38,10 @@ page-add-reading {
     top: 0;
     right: 0;
     content: "\201D";
+  }
+  .modal-add {
+    background-color: #f4f4f4;
+    text-align: center;
+    color: #488aff;
   }
 }
