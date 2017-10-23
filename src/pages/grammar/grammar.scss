@@ -2,6 +2,9 @@ page-grammar {
     .translation {
         text-align: center;
     }
+    .translation h1 {
+        font-size: 2rem;
+    }
     .sentence {
         text-align: center;
     }
@@ -22,5 +25,12 @@ page-grammar {
     .incorrect-word {
         text-decoration: line-through;
         text-decoration-color: #f53d3d;
+    }
+    .height-list {
+        height: 100% !important;
+        margin-bottom: 0px !important;
+    }
+    .height-list .translation {
+        height: 35%;
     }
 }

@@ -28,6 +28,7 @@ import { VideoPage } from "../pages/video/video";
 import { AddGrammarPage } from "../pages/add-grammar/add-grammar";
 import { GrammarPage } from "../pages/grammar/grammar";
 import { WordTrainingPage } from "../pages/word-training/word-training";
+import { ReadingTrainingPage } from "../pages/reading-training/reading-training";
 
 import { CapitalizePipe } from "../pipes/capitalize/capitalize";
 import { ReversePipe } from "../pipes/reverse/reverse";
@@ -82,6 +83,7 @@ export const firebaseConfig = {
     AddGrammarPage,
     GrammarPage,
     WordTrainingPage,
+    ReadingTrainingPage,
     CapitalizePipe,
     ReversePipe,
     WordsByCollectionPipe,
@@ -133,6 +135,7 @@ export const firebaseConfig = {
     AddGrammarPage,
     GrammarPage,
     WordTrainingPage,
+    ReadingTrainingPage,
     ReadingText,
     ReadingImage,
     ReadingQuote,

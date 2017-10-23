@@ -107,7 +107,9 @@ export class CollectionPage {
 
   onReadingClick(reading) {
     this.navCtrl.push(ReadingPage, {
-      reading: reading
+      collection: this.collection,
+      reading: reading,
+      studentKey: this.studentKey
     });
   }
 

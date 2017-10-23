@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ section == 'answer' ? 'Q&A' : 'T/F'}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="question-field">
+    <span *ngIf="section == 'answer'">{{ questionsAnswer[questionsAnswerIndex]?.text }}</span>
+    <span *ngIf="section == 'truefalse'">{{ questionsTrueFalse[questionsTrueFalseIndex]?.text }}</span>    
+  </div>
+  <ion-grid>
+      <ion-col *ngIf="section == 'answer'">
+        <ion-row *ngFor="let answer of questionsAnswer[questionsAnswerIndex]?.answers">
+            <button #button ion-button full clear
+              [disabled]="isAnswered"
+              [style.background-color]="isAnswered && answer.isCorrect ? '#32db64' : 'white'"
+              [style.color]="isAnswered && answer.isCorrect ? 'white' : '#488aff'"              
+              (click)="onAnswerClick(answer, button)">{{ answer?.text }}</button>
+        </ion-row>
+      </ion-col>
+      <ion-col *ngIf="section == 'truefalse'">
+          <ion-row>
+              <button #buttonTrue ion-button full clear
+                [disabled]="isAnswered"          
+                (click)="onTrueFalseClick(buttonTrue, true)">True</button>
+              <button #buttonFalse ion-button full clear
+                [disabled]="isAnswered"          
+                (click)="onTrueFalseClick(buttonFalse, false)">False</button>  
+          </ion-row>
+        </ion-col>
+    </ion-grid>
+</ion-content>
+
+<ion-footer no-border>
+  <ion-toolbar>
+    <ion-buttons> 
+      <button *ngIf="!isLastQuestionsAnswer &&  
+                     !isLastTrueFalse &&
+                     !isLastQuestion" [disabled]="!isAnswered" ion-button full
+        (click)="onSubmitClick()">Next</button>
+      <button *ngIf="isLastQuestionsAnswer ||
+                     isLastTrueFalse" [disabled]="!isAnswered" ion-button full
+        (click)="onNextSecionClick()">Next Section</button>
+      <button *ngIf="isLastQuestion" ion-button full
+        (click)="onFinishClick()">Finish</button>  
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

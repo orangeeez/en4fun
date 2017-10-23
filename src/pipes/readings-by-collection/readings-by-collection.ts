@@ -23,11 +23,15 @@ export class ReadingsByCollectionPipe implements PipeTransform {
       for (let readingKey of value) {
         let ref = this.afDB.object(`readings/${readingKey.$key}`)
           ref.subscribe(reading => {
-            this.afDB.object(`/learned/${this.afAuth.auth.currentUser['enemail']}/reading/collections/${collectionKey}/${readingKey.$key}`)
-              .subscribe(isLearned => {
-                reading['isLearned'] = isLearned.$value;
+            let ref = this.afDB.object(`/learned/${this.afAuth.auth.currentUser['enemail']}/reading/collections/${collectionKey}/${readingKey.$key}/coefficient`)
+              ref.subscribe(coefficient => {
+                let index = readings.findIndex(obj => obj.$key == readingKey.$key);
+                if (index != -1)
+                  readings.splice(index, 1);
 
-                if (reading.isLearned)
+                reading['coefficient'] = coefficient.$value;
+
+                if (coefficient.$exists())
                   readings.push(reading);
                 else
                   readings.unshift(reading);
@@ -42,6 +46,7 @@ export class ReadingsByCollectionPipe implements PipeTransform {
           ref.subscribe(reading => {
             readings.push(reading);
           });
+
           ref.$ref.on('child_changed', child => {
             let index = readings.findIndex(obj => obj.$key == child.ref.parent.key);
             if (index != -1)

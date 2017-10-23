@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireAuth } from "angularfire2/auth";
 import { AngularFireDatabase } from "angularfire2/database";
+import { ReadingTrainingPage } from "../reading-training/reading-training";
 import { WordsServiceProvider } from "../../providers/words-service/words-service";
 import * as firebase from 'firebase/app'
 
@@ -11,10 +12,12 @@ import * as firebase from 'firebase/app'
 })
 export class ReadingPage {
   user: firebase.User;
+  studentKey: string;
+  collection: string;
   reading: any;
   items: string[];
   translatedWords: any[];
-  selectedWord: any;  
+  selectedWord: any;
   
   constructor(
     public navCtrl: NavController, 
@@ -25,6 +28,8 @@ export class ReadingPage {
       this.translatedWords = [];
       this.user = this.afAuth.auth.currentUser;  
       this.reading = this.navParams.get('reading');
+      this.collection = this.navParams.get('collection');
+      this.studentKey = this.navParams.get('studentKey');
 
       this.afDB.database.ref(`readingTexts/${this.reading.$key}`).once('value')
         .then(text => this.items = text.val().match(/<p>(.*?)<\/p>/g).map(function(value) {
@@ -52,7 +57,13 @@ export class ReadingPage {
     }
   } 
 
-  onTrainingClick() {}
+  onTrainingClick() {
+    this.navCtrl.push(ReadingTrainingPage, {
+      collection: this.collection,
+      reading: this.reading,
+      studentKey: this.studentKey
+    })
+  }
 
   translateCallback(translatedWords, word) {
     if (word.translations) 

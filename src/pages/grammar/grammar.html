@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list *ngIf="type == 'constructor'" class="center">
+  <ion-list *ngIf="type == 'constructor'" class="height-list center">
     <ion-item text-wrap class="translation">
       <h1>{{ grammars[grammarIndex]?.translation }}</h1>
     </ion-item>
@@ -21,7 +21,7 @@
     <ion-grid *ngIf="this.words?.length != this.index">
       <ion-row>
         <ion-col *ngFor="let option of options; let i = index" col-6 class="column">
-            <button ion-button full clear color="dark"
+            <button ion-button full clear
               (click)="onOptionClick(option, i)">{{ option | uppercase }}</button>
         </ion-col>
       </ion-row>

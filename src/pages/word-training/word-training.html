@@ -40,7 +40,7 @@
                         training.type == 'translationword') &&
                         !result">
           <ion-col *ngFor="let option of options; let i = index" col-6 class="column">
-              <button ion-button full clear color="dark"
+              <button ion-button full clear
                 (click)="onOptionClick(option, i)">{{ option | uppercase }}</button>
           </ion-col>
         </ion-row>

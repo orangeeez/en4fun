@@ -245,8 +245,8 @@ export class ReadingModal {
     this.collectionKey = navParams.get('collectionKey');
     this.readingKey = navParams.get('readingKey');
 
-    this.questionsAnswer = this.afDB.list(`/readingQuestions/answer/${this.collectionKey}/${this.readingKey}`);
-    this.questionsTrueFalse = this.afDB.list(`/readingQuestions/truefalse/${this.collectionKey}/${this.readingKey}`);
+    this.questionsAnswer = this.afDB.list(`/readingQuestions/${this.collectionKey}/${this.readingKey}/answer`);
+    this.questionsTrueFalse = this.afDB.list(`/readingQuestions/${this.collectionKey}/${this.readingKey}/truefalse`);
   }
 
   onAddClick() {

@@ -37,7 +37,10 @@
   <!-- READING -->
   <ion-grid *ngIf="type == 'reading'">
     <ion-card  *ngFor="let reading of readings | async | readingsByCollection: undefined: collection.$key: 'content'">
-      <ion-icon *ngIf="reading?.isLearned" name="checkmark-circle" class="instance-checkmark" color="secondary"></ion-icon>
+      <div class="instance-checkmark">
+        <span class="coefficient">{{ reading.coefficient }}</span>
+      </div>
+      <!-- <ion-icon *ngIf="reading?.isLearned" name="checkmark-circle" class="instance-checkmark" color="secondary"></ion-icon> -->
       <ion-row>
         <ion-col col-12 class="col-reading">
           <ion-item class="reading-item" (click)="onReadingClick(reading)">
