@@ -93,7 +93,8 @@
           <ion-card *ngFor="let reading of readingCollection | readingsByCollection: search">
             <ion-row>
               <ion-col col-12>
-                <ion-item class="reading-item" (click)="onReadingClick(reading, readingCollection.key)">
+                <ion-item class="reading-item" 
+                  (click)="onReadingClick(reading, readingCollection.key)">
                   <img [src]="reading.imageURL">
                   <h5>{{ reading.shortText }}</h5>
                 </ion-item>
@@ -125,15 +126,15 @@
         <ng-container *ngIf="collection == videoCollection.key ||
                             collection == ''">
         <ion-item-divider color="light">{{ videoCollection.key | capitalize }}</ion-item-divider>
-          <ion-card *ngFor="let video of videoCollection | videosByCollection: search"
-            (press)="onVideoPressClick(video, videoCollection)">
+          <ion-card *ngFor="let video of videoCollection | videosByCollection: search">
             <ion-row>
               <ion-col col-12>
-                <ion-item class="video-item" 
-                  (click)="onPlayVideoClick(video.id)">
-                  <img [src]="video.thumbnails.high.url">
-                  <ion-icon name="play" class="play-button"></ion-icon>
-                  <h5>{{ video.title }}</h5>
+                <ion-item class="video-item">
+                  <img [src]="video.thumbnails.high.url"
+                    (click)="onPlayVideoClick(video.id)">
+                  <ion-icon name="play" class="play-button"
+                    (click)="onPlayVideoClick(video.id)"></ion-icon>
+                  <h5 (click)="onVideoClick(video, videoCollection.key)">{{ video.title }}</h5>
                   <p>{{ video.publishedAt | parseDate | date: 'medium'}}</p>
                 </ion-item>
               </ion-col>

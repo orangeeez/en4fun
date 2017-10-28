@@ -27,9 +27,9 @@ export class AddReadingPage implements AfterViewInit {
     public navParams: NavParams,
     public afDB: AngularFireDatabase,
     private componentFactoryResolver: ComponentFactoryResolver) {
-    this.items = [];
-    this.reading = this.navParams.get('reading');
-    this.collectionKeys = this.afDB.list(`readingCollections`);
+      this.items = [];
+      this.reading = this.navParams.get('reading');
+      this.collectionKeys = this.afDB.list(`/collectionKeys/reading`);
   }
 
   ngAfterViewInit() {
@@ -91,12 +91,11 @@ export class AddReadingPage implements AfterViewInit {
   onAddQuestionsClick() {
     const modal = this.modalCtrl.create(ReadingModal,
       {
-        collectionKey: this.selectedCollection,
+        collectionKey: this.selectedCollection ? this.selectedCollection : 'other',
         readingKey: this.reading.$key
       });
 
-    modal.onDidDismiss(data => {
-    });
+    modal.onDidDismiss(data => {});
     modal.present();
   }
 
@@ -352,6 +351,5 @@ export class ReadingModal {
         if (question.text.length > 0)
           this.questionsTrueFalse.push({ text: question.text, isTrue: question.isTrue });
     }
-
   }
 }

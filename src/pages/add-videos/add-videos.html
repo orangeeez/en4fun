@@ -21,7 +21,7 @@
         </ion-option>
       </ng-container>
     </ion-select>
-    <ion-icon *ngIf="selectedCollection != ''" item-end name="md-close" class="select-close-icon"
+    <ion-icon *ngIf="selectedCollection" item-end name="md-close" class="select-close-icon"
       (click)="onRemoveSelectClick()">
     </ion-icon>
   </ion-item>
@@ -41,17 +41,22 @@
     <ng-container *ngIf="searchVideos">
       <ion-item-divider color="light">Search Results</ion-item-divider>
       <ion-card *ngFor="let video of searchVideos">
-        <ion-checkbox #checkbox [style.display]="selectedCollection ? 'block' : 'none'" class="video-checkbox"
-          [checked]="video?.checked"
-          (click)="onVideoCheckboxClick(video, checkbox.checked)">
-        </ion-checkbox>          
+        <div *ngIf="selectedCollection">
+          <ion-checkbox #checkbox class="video-checkbox"
+            [checked]="video?.checked"
+            (click)="onVideoCheckboxClick(video, checkbox.checked)">
+          </ion-checkbox>
+          <ion-icon *ngIf="video?.checked" class="edit-icon" color="primary" name="md-create"
+            (click)="onEditVideoClick(video)"></ion-icon>        
+        </div>
         <ion-row>
           <ion-col col-12>
             <ion-item class="video-item">
               <img [src]="video.thumbnails.high.url"
                 [style.z-index]="1000"
                 (click)="onPlayVideoClick(video.id)">
-              <ion-icon name="play" class="play-button"></ion-icon>
+              <ion-icon name="play" class="play-button"
+                (click)="onPlayVideoClick(video.id)"></ion-icon>
               <h5>{{ video.title }}</h5>
               <p>{{ video.publishedAt | parseDate | date: 'medium'}}</p>
             </ion-item>
@@ -63,16 +68,20 @@
                          !searchVideos">
       <ion-item-divider color="light">{{ playlistName | capitalize }}</ion-item-divider>
       <ion-card *ngFor="let video of playlistVideos">
-        <ion-checkbox #checkbox [style.display]="selectedCollection ? 'block' : 'none'" class="video-checkbox"
-          [checked]="video?.checked"
-          (click)="onVideoCheckboxClick(video, checkbox.checked)">
-        </ion-checkbox>
+        <div *ngIf="selectedCollection">
+          <ion-checkbox #checkbox class="video-checkbox"
+            [checked]="video?.checked"
+            (click)="onVideoCheckboxClick(video, checkbox.checked)">
+          </ion-checkbox>
+          <ion-icon *ngIf="video?.checked" class="edit-icon" color="primary" name="md-create"
+            (click)="onEditVideoClick(video)"></ion-icon>
+        </div>
         <ion-row>
           <ion-col col-12>
-            <ion-item class="video-item"
-              (click)="onPlayVideoClick(video.id)">
-              <img [src]="video.thumbnails.high.url">
-              <ion-icon name="play" class="play-button"></ion-icon>
+            <ion-item class="video-item">
+              <img [src]="video.thumbnails.high.url" (click)="onPlayVideoClick(video.id)">
+              <ion-icon name="play" class="play-button"
+                (click)="onPlayVideoClick(video.id)"></ion-icon>
               <h5>{{ video.title }}</h5>
               <p>{{ video.publishedAt | parseDate | date: 'medium'}}</p>
             </ion-item>

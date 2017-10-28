@@ -107,9 +107,9 @@ export class CollectionPage {
 
   onReadingClick(reading) {
     this.navCtrl.push(ReadingPage, {
-      collection: this.collection,
-      reading: reading,
-      studentKey: this.studentKey
+      collectionKey: this.collection.$key,
+      studentKey: this.studentKey,
+      reading: reading
     });
   }
 
@@ -122,7 +122,6 @@ export class CollectionPage {
   }
 
   onRemoveWordClick(word: any) {
-    // this.words = [];
     this.afDB.database.ref(`/wordCollections/other`).child(word.$key).set(true);
     this.afDB.database.ref(`/wordCollections/${this.collection.$key}/${word.$key}`).remove();
     this.afDB.database.ref(`/wordKeys/${word.$key}`).set({ used: false });
@@ -134,6 +133,8 @@ export class CollectionPage {
 
   onTitleVideoClick(video) {
     this.navCtrl.push(VideoPage, {
+      collectionKey: this.collection.$key,
+      studentKey: this.studentKey,
       video: video
     });
   }

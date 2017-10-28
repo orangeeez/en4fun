@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add Questions</ion-title>
+    <ion-buttons left>
+      <button ion-button icon-only class="back-icon" 
+        (click)="viewCtrl.dismiss()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button icon-only 
+        [disabled]="!isAddActive" 
+        (click)="onDismissClick()">
+        <ion-icon name="md-checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-segment [(ngModel)]="segment" style="padding-bottom: 10px"
+    (ionChange)="onSegmentClick()">
+    <ion-segment-button value="answer">
+      Q&A
+    </ion-segment-button>
+    <ion-segment-button value="truefalse">
+      True/False
+    </ion-segment-button>
+  </ion-segment>
+  <ion-item *ngIf="!isAddActive" class="modal-add"
+    (click)="onAddClick()">
+    <h2> 
+      <ion-icon name="add"></ion-icon>
+      Add
+    </h2>
+  </ion-item>
+  <ng-container *ngIf="isAddActive">
+    <ng-container *ngFor="let question of mockQuestionsAnswer; let i = index">
+      <ion-item>
+        <ion-textarea [(ngModel)]="question.text" [placeholder]="question.placeholder"
+          (keyup)="onTextareaKeyup(i, question)">
+        </ion-textarea>
+        <ion-icon *ngIf="segment == 'truefalse'" name="checkmark-circle" class="true-icon" item-start
+          [style.color]="question?.isTrue ? '#32db64' : '#f4f4f4'"
+          (click)="onTrueFalseIconClick(question, true)"></ion-icon>
+        <ion-icon *ngIf="segment == 'truefalse'" name="close-circle" class="false-icon" item-start
+          [style.color]="question?.isTrue ? '#f4f4f4' : '#f53d3d'"
+          (click)="onTrueFalseIconClick(question, false)"></ion-icon>
+      </ion-item>
+      <ion-item *ngFor="let answer of question.answers; let ai = index" class="answer-item">
+        <ion-textarea [(ngModel)]="answer.text" [placeholder]="answer.placeholder"
+          (keyup)="onAnswerTextareaKeyup(ai, question.answers)">
+        </ion-textarea>
+        <ion-checkbox [(ngModel)]="answer.isCorrect" class="checkbox-answer-item"></ion-checkbox>
+      </ion-item>
+    </ng-container>
+  </ng-container>
+  <ion-list *ngIf="segment == 'answer'">
+    <ion-item-sliding *ngFor="let qa of questionsAnswer | async">
+      <ion-item>
+        <h2>{{ qa.text }}</h2>
+        <h4 *ngFor="let answer of qa.answers" class="list-answer-item"
+          [style.color]="answer.isCorrect ? '#32db64' : '#000'">
+          {{ answer.text }}
+        </h4>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="light"
+          (click)="onRemoveQAClick(qa)">
+          <ion-icon name="md-trash"></ion-icon>
+          Remove
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <ion-list *ngIf="segment == 'truefalse'">
+    <ion-item-sliding *ngFor="let qtf of questionsTrueFalse | async">
+      <ion-item>
+        <h2 [style.color]="qtf.isTrue ? '#32db64' : '#f53d3d'">{{ qtf.text }}</h2>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="light"
+          (click)="onRemoveQTFClick(qtf)">
+          <ion-icon name="md-trash"></ion-icon>
+          Remove
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

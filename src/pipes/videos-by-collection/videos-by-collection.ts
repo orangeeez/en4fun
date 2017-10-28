@@ -21,9 +21,7 @@ export class VideosByCollectionPipe implements PipeTransform {
         videoKeys.forEach(videoKey => {
           this.youtube.getVideoByID(videoKey.$value)
             .then(video => {
-              console.log(video.title);
-              // if (video.title.toLowerCase().includes(search))    
-                videos.push(video);
+              videos.push(video);
             });
         });
       });

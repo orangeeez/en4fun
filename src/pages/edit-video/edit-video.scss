@@ -1,4 +1,7 @@
-page-video {
+page-edit-video {
+    ion-footer button {
+        width: 45%;
+    }
     .play-button {
         position: absolute;
         top: 20%;
@@ -6,7 +9,10 @@ page-video {
         color: white;
         font-size: 3em;
     }
-    .paragraph {
+    .text {
+        padding: 5px;
+    }
+    reading-text [contenteditable=true] p {
         margin: 0 10px;
         text-indent: 10%;
     }

@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Edit Video</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only
+        (click)="onCheckmarkVideoClick()">
+        <ion-icon name="md-checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <img [src]="video.thumbnails.high.url"
+    (click)="onPlayVideoClick(video.id)">
+  <ion-icon name="play" class="play-button"></ion-icon>
+  <ng-template #target></ng-template>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons>
+      <button ion-button icon-only
+        (click)="onAddTextClick()">
+        <ion-icon name="md-text"></ion-icon>
+      </button>
+      <button ion-button icon-only
+        (click)="onAddQuestionsClick()">
+        <ion-icon name="help-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -13,7 +13,7 @@ import * as firebase from 'firebase/app'
 export class ReadingPage {
   user: firebase.User;
   studentKey: string;
-  collection: string;
+  collectionKey: string;
   reading: any;
   items: string[];
   translatedWords: any[];
@@ -28,7 +28,7 @@ export class ReadingPage {
       this.translatedWords = [];
       this.user = this.afAuth.auth.currentUser;  
       this.reading = this.navParams.get('reading');
-      this.collection = this.navParams.get('collection');
+      this.collectionKey = this.navParams.get('collectionKey');
       this.studentKey = this.navParams.get('studentKey');
 
       this.afDB.database.ref(`readingTexts/${this.reading.$key}`).once('value')
@@ -59,9 +59,9 @@ export class ReadingPage {
 
   onTrainingClick() {
     this.navCtrl.push(ReadingTrainingPage, {
-      collection: this.collection,
-      reading: this.reading,
-      studentKey: this.studentKey
+      collectionKey: this.collectionKey,
+      studentKey: this.studentKey,
+      reading: this.reading
     })
   }
 

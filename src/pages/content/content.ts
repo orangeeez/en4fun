@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TitleCasePipe } from "@angular/common";
-import { NavController, NavParams, Platform, AlertController, ActionSheetController } from 'ionic-angular';
+import { NavController, NavParams, Platform, AlertController, ActionSheetController, ModalController } from 'ionic-angular';
 import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
@@ -8,7 +8,9 @@ import { AddWordPage } from "../add-word/add-word";
 import { SpaceCapitalLettersPipe } from "../../pipes/space-capital-letters/space-capital-letters";
 import { ReadingPage } from "../reading/reading";
 import { AddReadingPage } from "../add-reading/add-reading";
-import { AddVideoPage } from "../add-video/add-video";
+import { AddVideosPage, VideoModal } from "../add-videos/add-videos";
+import { EditVideoPage } from "../edit-video/edit-video";
+import { VideoPage } from "../video/video";
 import { AddGrammarPage } from "../add-grammar/add-grammar";
 import * as firebase from 'firebase/app';
 
@@ -23,7 +25,7 @@ export class ContentPage {
   readingCollections: FirebaseListObservable<any[]>;
   videoCollections: FirebaseListObservable<any[]>;
   grammarCollections: FirebaseListObservable<any[]>;  
-  collectionType: string = 'reading';
+  collectionType: string = 'video';
   words: any[] = [];
   search: string = ""
   collection: string = "";
@@ -31,6 +33,7 @@ export class ContentPage {
 
   constructor(
     public platform: Platform,
+    public modalCtrl: ModalController,
     public navCtrl: NavController, 
     public navParams: NavParams,
     public afAuth: AngularFireAuth,
@@ -54,7 +57,7 @@ export class ContentPage {
           this.navCtrl.push(AddReadingPage);
           break;
         case 'video' : 
-          this.navCtrl.push(AddVideoPage);
+          this.navCtrl.push(AddVideosPage);
           break;
         case 'grammar' :
           this.navCtrl.push(AddGrammarPage);
@@ -89,6 +92,7 @@ export class ContentPage {
       }
     }
 
+    // READING HANDLErS
     onReadingClick(reading, collectionKey) {
       let buttons = []
       let openButton = {
@@ -159,7 +163,53 @@ export class ContentPage {
       this.youtubePlayer.openVideo(id);
     }
 
-    onVideoPressClick(video, collection) {
+    // VIDEO HANDLErS
+    onVideoClick(video, collectionKey, index) {
+      let buttons = []
+      let openbButton = {
+        text: 'Open',
+        handler: () => {
+          this.onOpenVideoClick(video);
+        }
+      }; 
+      let editbButton = {
+        text: 'Edit',
+        handler: () => {
+          this.onEditVideoClick(video, collectionKey);
+        }
+      }; 
+      let removeButton = {
+        text: 'Remove',
+          role: 'destructive',
+          handler: () => {
+            this.onRemoveVideoClick(video, collectionKey);
+          }
+      };
+
+      buttons.push(openbButton, editbButton, removeButton);
+
+      this.moreSheet = this.actionSheetCtrl.create({
+        title: this.titleCasePipe.transform(this.spaceCapitalLettersPipe.transform(video.title)),
+        buttons: buttons
+      });
+      this.moreSheet.present();
+    }
+
+    onOpenVideoClick(video) {
+      this.navCtrl.push(VideoPage, {
+        video: video
+      });
+    }
+
+    onEditVideoClick(video, collectionKey) {
+      this.navCtrl.push(EditVideoPage, {
+        collectionKey: collectionKey ? collectionKey : 'other',
+        videoKey: video.id,
+        video: video
+      });
+    }
+
+    onRemoveVideoClick(video, collectionKey) {
       let confirm = this.alertCtrl.create({
         title: 'Remove Video',
         message: `Do you want to remove "${video.title}"`,
@@ -170,7 +220,16 @@ export class ContentPage {
           {
             text: 'Yes',
             handler: () => {
-              this.afDB.database.ref(`/videoCollections/${collection.key}/${video.key}`).remove();
+              let ref = this.afDB.list(`/videoCollections/${collectionKey}`, { 
+                query : { 
+                  orderByValue: true,
+                  equalTo: video.id 
+                }
+              });
+              ref.subscribe(index => { 
+                this.afDB.database.ref(`/videoCollections/${collectionKey}/${index[0].$key}`).remove();
+                ref.$ref.off();
+              });
             }
           }
         ]

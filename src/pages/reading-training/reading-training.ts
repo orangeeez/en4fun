@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { App, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from "angularfire2/database";
 import { AngularFireAuth } from "angularfire2/auth";
-import { CollectionPage } from "../collection/collection";
 
 @Component({
   selector: 'page-reading-training',
@@ -11,8 +10,9 @@ import { CollectionPage } from "../collection/collection";
 export class ReadingTrainingPage {
   studentKey: string;
   coefficient: number;
-  collection: any;
+  collectionKey: any;
   reading: any;
+  video: any;
   section: string = 'answer';
   questionsAnswer: any[] = [];
   questionsTrueFalse: any[] = [];
@@ -29,25 +29,34 @@ export class ReadingTrainingPage {
   isLastTrueFalse: boolean;
 
   constructor(
-    public appCtrl: App,
     public navCtrl: NavController, 
     public navParams: NavParams,
     public afDB: AngularFireDatabase,
     public afAuth: AngularFireAuth) {
       this.studentKey = this.navParams.get('studentKey');
-      this.collection = this.navParams.get('collection');
+      this.collectionKey = this.navParams.get('collectionKey');
       this.reading = this.navParams.get('reading');
+      this.video = this.navParams.get('video');    
 
-      this.questionsAnswerObservable = this.afDB.list(`/readingQuestions/${this.collection.$key}/${this.reading.$key}/answer`);
-      this.questionsTrueFalseObservable = this.afDB.list(`/readingQuestions/${this.collection.$key}/${this.reading.$key}/truefalse`);
-      this.coefficientObservable = this.afDB.object(`/learned/${this.afAuth.auth.currentUser['enemail']}/reading/collections/${this.collection.$key}/${this.reading.$key}/coefficient`);
+      if (this.reading) {
+        this.questionsAnswerObservable = this.afDB.list(`/readingQuestions/${this.collectionKey}/${this.reading.$key}/answer`);
+        this.questionsTrueFalseObservable = this.afDB.list(`/readingQuestions/${this.collectionKey}/${this.reading.$key}/truefalse`);
+        this.coefficientObservable = this.afDB.object(`/learned/${this.afAuth.auth.currentUser['enemail']}/reading/collections/${this.collectionKey}/${this.reading.$key}/coefficient`);
+      }
+
+      if (this.video) {
+        this.questionsAnswerObservable = this.afDB.list(`/videoQuestions/${this.collectionKey}/${this.video.id}/answer`);
+        this.questionsTrueFalseObservable = this.afDB.list(`/videoQuestions/${this.collectionKey}/${this.video.id}/truefalse`);
+        this.coefficientObservable = this.afDB.object(`/learned/${this.afAuth.auth.currentUser['enemail']}/video/collections/${this.collectionKey}/${this.video.id}/coefficient`);
+      }
 
       this.coefficientObservable.set(0);
 
       this.questionsAnswerObservable
         .subscribe(qaKeys => {
             qaKeys.forEach(qa => {
-              this.questionsAnswer.push(qa);
+                this.questionsAnswer.push(qa);
+              });
               this.questionsTrueFalseObservable
               .subscribe(qaKeys => {
                   qaKeys.forEach(qtf => {
@@ -55,7 +64,7 @@ export class ReadingTrainingPage {
                     this.coefficient = 100 / (this.questionsAnswer.length + this.questionsTrueFalse.length);
                   });
               });
-            });
+            
         });
   }
 
@@ -73,8 +82,11 @@ export class ReadingTrainingPage {
   }
 
   onTrueFalseClick(button, isTrue) {
-    this.isAnswered = true;
+    console.log(this.questionsTrueFalse[this.questionsTrueFalseIndex].isTrue);
+    console.log(isTrue);
 
+    this.isAnswered = true;
+    
     if (this.questionsTrueFalseIndex == this.questionsTrueFalse.length - 1)
       this.isLastQuestion = true;
 
@@ -83,30 +95,41 @@ export class ReadingTrainingPage {
       button._elementRef.nativeElement.style.backgroundColor = '#32db64';
       button._elementRef.nativeElement.style.color = 'white';
     }
-    else if (this.questionsTrueFalse[this.questionsTrueFalseIndex].isTrue && !isTrue) {
+    else {
       this.isAnsweredTrue = false;      
       button._elementRef.nativeElement.style.backgroundColor = '#f53d3d';
       button._elementRef.nativeElement.style.color = 'white';
     }
   }
 
-  onSubmitClick() {
+  onSubmitClick(isNextSection?: boolean) {
     let key;
     this.isAnswered = false;
     switch (this.section) {
-      case 'answer': key = this.questionsAnswer[this.questionsAnswerIndex].$key; break;
-      case 'truefalse': key = this.questionsTrueFalse[this.questionsTrueFalseIndex].$key; break;      
+      case 'answer': 
+        key = this.questionsAnswer[this.questionsAnswerIndex].$key;
+        if (!isNextSection) this.questionsAnswerIndex++;
+      break;
+      case 'truefalse': 
+        key = this.questionsTrueFalse[this.questionsTrueFalseIndex].$key; 
+        if (!isNextSection) this.questionsTrueFalseIndex++;        
+      break;      
     }
 
     if (this.isAnsweredTrue)
       this.currentCoefficient += this.coefficient;
 
-    this.afDB.database.ref(`learned/${this.afAuth.auth.currentUser['enemail']}/reading/collections/${this.collection.$key}/${this.reading.$key}/${this.section}/${key}`).set(this.isAnsweredTrue);
-    this.coefficientObservable.set(this.currentCoefficient);
+    if (this.reading)
+      this.afDB.database.ref(`learned/${this.afAuth.auth.currentUser['enemail']}/reading/collections/${this.collectionKey}/${this.reading.$key}/${this.section}/${key}`).set(this.isAnsweredTrue);
+    
+    if (this.video)
+      this.afDB.database.ref(`learned/${this.afAuth.auth.currentUser['enemail']}/video/collections/${this.collectionKey}/${this.video.id}/${this.section}/${key}`).set(this.isAnsweredTrue);
+    
+    this.coefficientObservable.set(Math.floor(this.currentCoefficient));
   }
 
   onNextSecionClick() {
-    this.onSubmitClick();
+    this.onSubmitClick(true);
 
     this.section = 'truefalse';
     this.isLastQuestionsAnswer = false;
@@ -116,10 +139,7 @@ export class ReadingTrainingPage {
   onFinishClick() {
     this.onSubmitClick();    
     
-    this.appCtrl.getRootNav().push(CollectionPage, {
-      type: 'reading',
-      collection: this.collection,
-      studentKey: this.studentKey
-    })
+    this.navCtrl.pop()
+      .then(reason => this.navCtrl.pop());
   }
 }

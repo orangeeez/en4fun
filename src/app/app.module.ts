@@ -23,8 +23,9 @@ import { TeachersPage } from "../pages/teachers/teachers";
 import { StudentsPage } from "../pages/students/students";
 import { ReadingPage } from "../pages/reading/reading";
 import { AddReadingPage, ReadingText, ReadingImage, ReadingQuote, ReadingModal } from "../pages/add-reading/add-reading";
-import { AddVideoPage } from "../pages/add-video/add-video";
+import { AddVideosPage, VideoModal } from "../pages/add-videos/add-videos";
 import { VideoPage } from "../pages/video/video";
+import { EditVideoPage } from "../pages/edit-video/edit-video";
 import { AddGrammarPage } from "../pages/add-grammar/add-grammar";
 import { GrammarPage } from "../pages/grammar/grammar";
 import { WordTrainingPage } from "../pages/word-training/word-training";
@@ -78,8 +79,9 @@ export const firebaseConfig = {
     StudentsPage,
     ReadingPage,
     AddReadingPage,
-    AddVideoPage,
+    AddVideosPage,
     VideoPage,
+    EditVideoPage,
     AddGrammarPage,
     GrammarPage,
     WordTrainingPage,
@@ -103,6 +105,7 @@ export const firebaseConfig = {
     ReadingImage,
     ReadingQuote,
     ReadingModal,
+    VideoModal,
     SafeHtmlDirective,
     GrammarValueDirective
   ],
@@ -130,8 +133,9 @@ export const firebaseConfig = {
     StudentsPage,
     ReadingPage,
     AddReadingPage,
-    AddVideoPage,
+    AddVideosPage,
     VideoPage,
+    EditVideoPage,
     AddGrammarPage,
     GrammarPage,
     WordTrainingPage,
@@ -139,7 +143,8 @@ export const firebaseConfig = {
     ReadingText,
     ReadingImage,
     ReadingQuote,
-    ReadingModal
+    ReadingModal,
+    VideoModal
   ],
   providers: [
     StatusBar,

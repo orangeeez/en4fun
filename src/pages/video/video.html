@@ -1,13 +1,22 @@
 <ion-header>
   <ion-navbar>
-    <ion-title></ion-title>
+    <ion-title>{{ video?.title }}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ng-container>
   <img [src]="video.thumbnails.high.url"
     (click)="onPlayVideoClick(video.id)">
   <ion-icon name="play" class="play-button"></ion-icon>
-  </ng-container>
+  <p *ngFor="let item of items" class="paragraph">
+    <span #spanWord *ngFor="let word of item | splitByWord" 
+      [innerHTML]="word | addSpaceCharacter"
+      (tap)="onTapWord(spanWord)"></span> 
+  </p>
+  <div style="text-align: center">
+    <button ion-button round outline 
+      (click)="onTrainingClick()">
+        Go to answers
+    </button>
+  </div>
 </ion-content>

@@ -1,4 +1,4 @@
-page-add-video {
+page-add-videos {
     .video-item {
         padding-top: 5px;
         padding-left: 8px;
@@ -26,12 +26,19 @@ page-add-video {
         font-size: 3em;
     }
     .video-checkbox {
-        display: block;
+        display: inline-block !important;
         padding-top: 5px;
         padding-right: 8px;
+        padding-left: 8px;      
+        width: 90%;  
     }
-    .video-checkbox .checkbox-icon {
-        margin-left: auto;
+    .edit-icon {
+        font-size: 1.5em;
+    }
+    .edit-icon.icon-ios {
+        position: absolute;
+        margin-top: 3px;
+        font-size: 1.8em;
     }
     .toolbar-content .select-ios {
         font-size: 1.7rem;

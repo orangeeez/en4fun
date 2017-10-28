@@ -3,14 +3,17 @@
     <ion-title>Add Text</ion-title>
     <ion-buttons end>
       <button ion-button icon-only
-        [disabled]="!items"
+        [disabled]="!title ||
+                    !selectedCollection ||
+                    !imageURL ||
+                    items.length == 0"
         (click)="onCheckmarkReadingClick()">
         <ion-icon name="md-checkmark"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-
+  
 <ion-content>
   <img [src]="imageURL">
   <ion-item>
