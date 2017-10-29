@@ -47,10 +47,16 @@ export class HomePage {
                   this.studentsNames.push(name);
                 });
             });
-          });
-          
-        this.collectionTypes = this.afDB.list('/collectionTypes');
+          });    
+        }
+      
+      if (this.user['type'] == 'student') {
+        this.studentsNames.length = 0;
+        this.studentsNames.push({ key: this.user['enemail']});
+        this.studentKey = this.studentsNames[0];
       }
+
+      this.collectionTypes = this.afDB.list('/collectionTypes');
   }
 
   onAddCollectionClick(type: string) {
