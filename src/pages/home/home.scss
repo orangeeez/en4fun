@@ -8,4 +8,7 @@ page-home {
     ion-col h4 {
         text-align: center;
     }
+    .student-selected ion-select {
+        max-width: 100%;
+    }
 }

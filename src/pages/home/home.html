@@ -11,7 +11,7 @@
 <ion-content padding>
   <ion-card>
     <ion-item *ngIf="user?.type == 'admin' ||
-                     user?.type == 'teacher'">
+                     user?.type == 'teacher'" class="student-selected">
       <ion-label>Student</ion-label>
       <ion-select [(ngModel)]="studentKey">
         <ng-container *ngFor="let student of studentsNames">

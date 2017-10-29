@@ -30,12 +30,12 @@ export class TeachersPage {
       this.teacherKeys = this.afDB.list(`/teacherKeys`);
       this.studentKeys = this.afDB.list(`/studentKeys`);
 
-      let ref = this.teacherKeys
+      this.teacherKeys
         .subscribe(teacherKeys => {
           teacherKeys.forEach(teacherKey => {
             this.teacherStudentNames[teacherKey.$key] = [];
           });
-          ref.unsubscribe();
+          this.teacherKeys.$ref.off()
         });
   }
 

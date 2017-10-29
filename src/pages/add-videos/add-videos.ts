@@ -33,7 +33,7 @@ export class AddVideosPage {
     public afAuth: AngularFireAuth,
     public youtubePlayer: YoutubeVideoPlayer) {
       this.user = this.afAuth.auth.currentUser;
-      this.collectionKeys = this.afDB.list(`videoCollections`);
+      this.collectionKeys = this.afDB.list(`/collectionKeys/video`);
 
       this.afDB.object(`/teacherPlaylists/${this.user['enemail']}`)
         .subscribe(playlist => {

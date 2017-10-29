@@ -43,8 +43,7 @@ export class VideosByCollectionPipe implements PipeTransform {
             });
         });
       });
-    }
-      
+    } 
     else {
       value.val().forEach((id, key) => {
         this.youtube.getVideoByID(id)
