@@ -1,27 +1,45 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import YouTube from "simple-youtube-api";
+import { AngularFireDatabase } from "angularfire2/database";
+import { AngularFireAuth } from "angularfire2/auth";
 
 @Pipe({
   name: 'videosByCollection',
 })
 export class VideosByCollectionPipe implements PipeTransform {
   youtube: any;
-  constructor() {
-    this.youtube = new YouTube('AIzaSyAkcmdXMPyklcO0Te2Dcl1BjSELCdJ86ms');
+  constructor(
+    public afDB: AngularFireDatabase,
+    public afAuth: AngularFireAuth) {
+      this.youtube = new YouTube('AIzaSyAkcmdXMPyklcO0Te2Dcl1BjSELCdJ86ms');
   }
-  transform(value, search, collection) {
+  transform(value, search, collectionKey: string) {
     var videos = [];
 
     if (search)
       search = search.toLowerCase();
+
+    if (!value)
+      return;
     
-    if (collection) {
+    if (value && collectionKey) {
       value.subscribe(videoKeys => {
-        videos.splice(0, videos.length);
         videoKeys.forEach(videoKey => {
           this.youtube.getVideoByID(videoKey.$value)
             .then(video => {
-              videos.push(video);
+              let ref = this.afDB.object(`/learned/${this.afAuth.auth.currentUser['enemail']}/video/collections/${collectionKey}/${videoKey.$value}/coefficient`)
+              ref.subscribe(coefficient => {
+                let index = videos.findIndex(obj => obj.$key == videoKey.$key);
+                if (index != -1)
+                  videos.splice(index, 1);
+
+                video['coefficient'] = coefficient.$value;
+
+                if (coefficient.$exists())
+                  videos.push(video);
+                else
+                  videos.unshift(video);
+              });
             });
         });
       });

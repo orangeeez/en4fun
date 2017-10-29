@@ -96,6 +96,9 @@
   <!-- VIDEO -->
   <ion-grid *ngIf="type == 'video'">
     <ion-card *ngFor="let video of videos | videosByCollection: undefined: collection.$key">
+      <div class="instance-checkmark">
+        <span class="coefficient">{{ video.coefficient }}</span>
+      </div>
       <ion-row>
         <ion-col col-12 class="col-video">
           <ion-item class="video-item">
