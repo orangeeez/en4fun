@@ -1,8 +1,9 @@
 page-students {
-  .edit-teacher-select {
+  .edit-teachers-select {
     height: 0;
+    width: 0;    
     padding: 0;
-  }
+    }
   .item-ios.item-block .item-inner {
     border-bottom: none;
   }
@@ -30,5 +31,12 @@ page-students {
   }
   :-moz-placeholder {
     font-size: 16px;    
+  }
+  // ion-select-selected
+  .teacher-selected ion-label {
+    display: none;
+  }
+  .teacher-selected ion-select {
+    max-width: 100%;
   }
 }

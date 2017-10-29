@@ -13,6 +13,7 @@ export class StudentsPage {
   studentKeys: FirebaseListObservable<any[]>;
   teacherKeys: FirebaseListObservable<any[]>;
   teacherKey: any;
+  selectedTeacherKey: any;
   email: string;
 
   constructor(
@@ -46,5 +47,21 @@ export class StudentsPage {
         this.afDB.database.ref(`/studentKeys/${studentKey}`).remove();
         this.afDB.database.ref(`/students/${studentKey}`).remove();
       }).unsubscribe();
+  }
+
+  onSelectChange(studentKey, sliding) {
+    this.afDB.database.ref(`/students/${studentKey.$key}/teacher`).once('value')
+      .then(value => {  
+        let currentTeacher = Object.keys(value.val())[0];
+        this.afDB.database.ref(`/teachers/${currentTeacher}/students/${studentKey.$key}`).remove();     
+      });
+    this.afDB.database.ref(`/teachers/${this.selectedTeacherKey.$key}/students/${studentKey.$key}`).set(studentKey.$value); 
+    this.afDB.database.ref(`/students/${studentKey.$key}/teacher/`).remove();   
+    this.afDB.database.ref(`/students/${studentKey.$key}/teacher/${this.selectedTeacherKey.$key}`).set(this.selectedTeacherKey.$value);
+    sliding.close();
+  }
+
+  onSelectCancel(sliding) {
+    sliding.close();
   }
 }

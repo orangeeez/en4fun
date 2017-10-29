@@ -53,8 +53,6 @@ export class TeachersPage {
     this.studentNames = [];
   }
 
-  onEditTeacherClick(teacherKey: string) { }
-
   onSelectChange(teacherKey, sliding) {
     this.afDB.database.ref(`/teachers/${teacherKey.$key}/students`).once('value')
       .then(studentKeys => {

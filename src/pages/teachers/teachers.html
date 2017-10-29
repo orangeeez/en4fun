@@ -14,7 +14,7 @@
         <ion-input [(ngModel)]="email" type="text" placeholder="Email"></ion-input>
       </ion-col>
       <ion-col>
-        <ion-item>
+        <ion-item [ngClass]="studentNames?.length > 0 ? 'student-selected' : ''">
           <ion-label>Students</ion-label>
           <ion-select [(ngModel)]="studentNames" multiple>
             <ng-container *ngFor="let studentKey of studentKeys | async | isHasTeacher">
@@ -48,8 +48,7 @@
           Edit
           <ion-select *ngIf="teacherKey?.isEdit" [(ngModel)]="teacherStudentNames[teacherKey.$key]" class="edit-students-select" multiple
             (ionChange)="onSelectChange(teacherKey, sliding)"
-            (ionCancel)="onSelectCancel(sliding)"
-            (click)="onEditTeacherClick(teacherKey)">
+            (ionCancel)="onSelectCancel(sliding)">
             <ion-option *ngFor="let studentKey of studentKeys | async let i = index;" 
               [value]="studentKey" 
               [selected]="studentCheckedNames[i]" 

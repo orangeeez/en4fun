@@ -32,4 +32,11 @@ page-teachers {
   :-moz-placeholder {
     font-size: 16px;    
   }
+  // ion-select-selected
+  .student-selected ion-label {
+    display: none;
+  }
+  .student-selected ion-select {
+    max-width: 100%;
+  }
 }

@@ -14,7 +14,7 @@
         <ion-input [(ngModel)]="email" type="text" placeholder="Email"></ion-input>
       </ion-col>
       <ion-col>
-        <ion-item>
+        <ion-item [ngClass]="teacherKey ? 'teacher-selected' : ''">
           <ion-label>Teacher</ion-label>
           <ion-select [(ngModel)]="teacherKey">
             <ng-container *ngFor="let teacherKey of teacherKeys | async">
@@ -33,7 +33,7 @@
     </ion-row>
   </ion-grid>
   <ion-list no-lines>
-    <ion-item-sliding *ngFor="let studentKey of studentKeys | async">
+    <ion-item-sliding #sliding *ngFor="let studentKey of studentKeys | async">
       <ion-item>
         <ion-avatar item-start>
           <img [src]="studentKey.$value == '' ? 'assets/images/image.jpg' : (studentKey | imageByKey: 'student' | async)?.$value">
@@ -43,6 +43,18 @@
         <ion-badge item-end>{{ studentKey?.$value == '' ? 'Pending' : 'Activated' }}</ion-badge>
       </ion-item>
       <ion-item-options *ngIf="user?.type == 'admin'" side="right">
+        <button ion-button color="light">
+          <ion-icon name="md-create"></ion-icon>
+          Edit
+          <ion-select [(ngModel)]="selectedTeacherKey" class="edit-teachers-select"
+            (ionChange)="onSelectChange(studentKey, sliding)"
+            (ionCancel)="onSelectCancel(sliding)">
+            <ion-option *ngFor="let teacherKey of teacherKeys | async let i = index;"
+              [value]="teacherKey || teacherKey">
+              {{ teacherKey.$value || teacherKey.$key }}
+            </ion-option>
+          </ion-select>
+        </button>
         <button ion-button color="light"
           (click)="onRemoveStudentClick(studentKey.$key)">
           <ion-icon name="md-trash"></ion-icon>

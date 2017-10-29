@@ -8,7 +8,7 @@ import { AddWordPage } from "../add-word/add-word";
 import { SpaceCapitalLettersPipe } from "../../pipes/space-capital-letters/space-capital-letters";
 import { ReadingPage } from "../reading/reading";
 import { AddReadingPage } from "../add-reading/add-reading";
-import { AddVideosPage, VideoModal } from "../add-videos/add-videos";
+import { AddVideosPage } from "../add-videos/add-videos";
 import { EditVideoPage } from "../edit-video/edit-video";
 import { VideoPage } from "../video/video";
 import { AddGrammarPage } from "../add-grammar/add-grammar";
