@@ -115,8 +115,11 @@ export class ContentPage {
           }
       };
 
-      buttons.push(openButton, editbButton, removeButton);
-
+      if (this.user['type'] == 'admin')
+        buttons.push(openButton, editbButton, removeButton);
+      else
+        buttons.push(openButton);
+        
       this.moreSheet = this.actionSheetCtrl.create({
         title: this.titleCasePipe.transform(this.spaceCapitalLettersPipe.transform(reading.$key)),
         buttons: buttons
@@ -186,7 +189,10 @@ export class ContentPage {
           }
       };
 
-      buttons.push(openbButton, editbButton, removeButton);
+      if (this.user['type'] == 'admin')
+        buttons.push(openbButton, editbButton, removeButton);
+      else
+        buttons.push(openbButton);
 
       this.moreSheet = this.actionSheetCtrl.create({
         title: this.titleCasePipe.transform(this.spaceCapitalLettersPipe.transform(video.title)),

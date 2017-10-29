@@ -30,12 +30,13 @@ export class TeachersPage {
       this.teacherKeys = this.afDB.list(`/teacherKeys`);
       this.studentKeys = this.afDB.list(`/studentKeys`);
 
-      this.teacherKeys
+      let ref = this.teacherKeys
         .subscribe(teacherKeys => {
           teacherKeys.forEach(teacherKey => {
             this.teacherStudentNames[teacherKey.$key] = [];
           });
-        }).unsubscribe();
+          ref.unsubscribe();
+        });
   }
 
   onAddTeacherClick() {
@@ -48,7 +49,7 @@ export class TeachersPage {
     this.afDB.database.ref(`/teachers/${this.email}/admin`).set(false);
     this.afDB.database.ref(`/teacherKeys/${this.email}`).set('');
     this.afDB.database.ref(`/teacherPlaylists/${this.email}`).set('');    
-    this.teacherStudentNames[this.email] = [];
+    this.teacherStudentNames[this.email] = this.studentNames;
     this.email = '';
     this.studentNames = [];
   }
@@ -103,7 +104,11 @@ export class TeachersPage {
   }
 
   onRemoveTeacherClick(teacherKey: string) {
+    for (let studentName of this.teacherStudentNames[teacherKey])
+      this.afDB.database.ref(`/students/${studentName.$key}/teacher/`).remove();
+
     this.afDB.database.ref(`/teacherKeys/${teacherKey}`).remove();
     this.afDB.database.ref(`/teachers/${teacherKey}`).remove();
+
   }
 }
