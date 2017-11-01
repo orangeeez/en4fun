@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import YouTube from "simple-youtube-api";
+import YouTube from "simple-youtube-api-test";
 import { AngularFireDatabase } from "angularfire2/database";
 import { AngularFireAuth } from "angularfire2/auth";
 

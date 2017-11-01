@@ -4,7 +4,7 @@ import { AngularFireDatabase, FirebaseListObservable } from "angularfire2/databa
 import { AngularFireAuth } from 'angularfire2/auth';
 import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player'
 import { EditVideoPage } from "../edit-video/edit-video";
-import YouTube from 'simple-youtube-api';
+import YouTube from 'simple-youtube-api-test';
 import * as firebase from 'firebase/app';
 
 @Component({
